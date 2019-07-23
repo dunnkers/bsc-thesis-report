@@ -1,4 +1,21 @@
 % !TEX root = thesis.tex
 
 \section{Method}\label{sec:method}
-Method!!
+Machine-learning is used in order to merge the two existing algorithms and predict new results. In order to generate reproducible results, a pipeline is used. In this pipeline, a number of steps are executed, each taking the output of the previous step as an input, and then generating new output. This makes for a modular and predictable sequence of steps generating a result.
+
+The pipeline built has a sequence of steps. First, re-sized and re-scaled versions of the data-set imaging are cached, such that this computationally expensive operation has to be ran only once. Next, the cached imaging is taken, and is transformed to the correct data-structure format in order to be trained by a machine-learning model. After the transformations the data-set is trained using a chosen classifier, storing the fitted classifier afterward. Taking the trained classifier, finally new results are predicted in the test step, storing the results afterward. Optionally, the results can be visualized by running an additional step in the pipeline.
+% Using a pipeline: input is the data-set, then we 1) cache 2) transform 3) train 4) test.
+% Intermediate, independent, reproducible steps.
+
+
+\subsection{Machine learning using sklearn}
+% Using Python
+% Using SKlearn
+% Other libraries; numpy,
+
+\subsection{Pipeline}
+\subsubsection{Caching}
+\subsubsection{Transforming}
+\subsubsection{Training}
+\subsubsection{Testing}
+\subsubsection{Visualization}
