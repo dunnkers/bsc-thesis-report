@@ -61,13 +61,13 @@ See Figure~\ref{fig:caching-steps} for the steps that are taken during the cachi
 
 Different caches are built with various pixel configurations of different scaling factors. Images are down-scaled with various factors, ranging from $3.0/4.0$ to a factor of $1.0/20.0$.
 
-Noticeable in the figure is that $groundtruth$ images get an extra step before saving. This is because the data-set $groundtruth$ images are not binary. 
+Noticeable in the figure is that $groundtruth$ images get an extra step before saving. This is because the data-set $groundtruth$ images are not binary, see Figure~\ref{fig:gt-histogram}. Although most values lie at the $0.0$ or $1.0$ value-point, there also exist some values in between. Because there are relatively little values in between, we need a logarithmic scaled histogram in order to visualize them. In order to make the groundtruth images binary, a mapping method is used. An easy way is to cut the spectrum in half, allocating all values $< 0.5$ as $0$ and all values $>= 0.5$ as $1$. The skimage function $img_as_bool$ is used for this functionality.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=\linewidth]{img/groundtruth-histogram.png}
   \caption{Histogram of a groundtruth image in $log$ scale.
-  }\label{fig:afb1}
+  }\label{fig:gt-histogram}
 \end{figure}
 
 \subsubsection{Transforming}
