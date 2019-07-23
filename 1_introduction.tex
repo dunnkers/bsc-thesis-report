@@ -1,4 +1,20 @@
 % !TEX root = thesis.tex
 
 \section{Introduction}\label{sec:introduction}
-Epic intro here.
+% The study tries to fuse two algorithms.
+In this study the output of two existing ways of processing and classifying images with road markings are used, in order to train a new supervised model based on top of the existing two. One of the algorithms has used deep-learning, using a supervised approach in order to detect the road markings, whilst the other algorithm used a filter-based, unsupervised approach in order to detect road markings.
+
+% Both algorithms output images and are seen as a black box. 
+Both approaches output images, where the road markings are accentuated by using different color intensities in the image. This study only considers the output of both algorithms, the output images. For this reason the exact workings of both algorithms are considered as a `black box`; no information is taken into consideration regarding the workings of the algorithms, only the output is considered.
+
+% What previous studies did?
+
+
+% Data-set
+The data-set used consists of images separated in three different classes: the ground truth, output images from the supervised approach and output images from the unsupervised approach. The data-set contains 1000 ground truth images, for which every image has a supervised- and unsupervised image counterpart, sketching the exact same road situation. This means that supervised training can be used to train the combined output of both the supervised- and unsupervised approach using 1000 ground truth images. The collection of supervised and unsupervised imaging contain a total of 3117 images each, meaning that some imaging cannot be used to train or for which results cannot be automatically validated. This imaging can be validated, however, using manual visual inspection.
+
+% Applications in areas of interest.
+Applications of road marker detection exist in various areas of interest. One of these areas of interest are road damage inspections. Road damage inspections are a tedious process, where many hours are spent manually evaluating imaging taken from the road in order to assess the level of road damaging. For this automated ways of road marker detection can be used, with an extension to road marker damage assessment. Another area of interest is autonomous driving, in which it is crucial that the artificial intelligence understands and correctly interprets the markings on the road.
+
+% Outline
+In the next chapters the method of research and the results will be discussed. The method will start with a general outline, which aims to give a broad perspective on the method. Next in the method a more thorough explanation of the used pipeline will be given, in which the different configurations and parameters will be explained. In the results section, an insight is given into the effects of various parameters on individual test image results. After this a result analysis over the entire data-set is presented. Finally, a set of conclusions are drawn upon the entire set of results. After this we lastly discuss the different short-comings in the study or biases that might have influenced the study.
