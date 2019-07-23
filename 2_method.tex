@@ -1,20 +1,104 @@
 % !TEX root = thesis.tex
 
 \section{Method}\label{sec:method}
+% What is a ML pipeline
 Machine-learning is used in order to merge the two existing algorithms and predict new results. In order to generate reproducible results, a pipeline is used. In this pipeline, a number of steps are executed, each taking the output of the previous step as an input, and then generating new output. This makes for a modular and predictable sequence of steps generating a result.
 
-The pipeline built has a sequence of steps. First, re-sized and re-scaled versions of the data-set imaging are cached, such that this computationally expensive operation has to be ran only once. Next, the cached imaging is taken, and is transformed to the correct data-structure format in order to be trained by a machine-learning model. After the transformations the data-set is trained using a chosen classifier, storing the fitted classifier afterward. Taking the trained classifier, finally new results are predicted in the test step, storing the results afterward. Optionally, the results can be visualized by running an additional step in the pipeline.
-% Using a pipeline: input is the data-set, then we 1) cache 2) transform 3) train 4) test.
-% Intermediate, independent, reproducible steps.
+% Explain pipeline steps
+The pipeline built in the study has a sequence of steps. First, re-sized and re-scaled versions of the data-set imaging are cached, such that this computationally expensive operation has to be ran only once. Next, the cached imaging is taken, and is transformed to the correct data-structure format in order to be trained by a machine-learning model. After the transformations the data-set is trained using a chosen classifier, storing the fitted classifier afterward. Taking the trained classifier, finally new results are predicted in the test step, storing the results afterward. Optionally, the results can be visualized by running an additional step in the pipeline.
 
+% Implementation - python
+Python is a common platform for data-science projects. Since a broad range of tools and packages are available in this ecosystem, the pipeline is written in Python.
 
-\subsection{Machine learning using sklearn}
-% Using Python
-% Using SKlearn
-% Other libraries; numpy,
+\subsection{Support libraries}
+The pipeline makes use of preexisting tools in order to help with common tasks. In order to read, write, and process images the scikit-image library \citep{van2014scikit} is used. This library has built-in functions to re-size and re-scale images, as well as convert images between different data type formats, e.g. converting $float64$ image datatypes to $uint8$. Scikit-image also facilitates RGB- to gray-scale color conversion.
+
+Next, in order to run existing classification models and other common machine-learning related tasks, such as transforming the data or analyzing test results, the scikit-learn library \citep{scikit-learn} is used.
+
+Lastly, Numpy \citep{van2011numpy} is used for creating and altering arrays as well as working with n-dimensional arrays.
 
 \subsection{Pipeline}
+The pipeline consists of four essential steps, with one optional visualization step in order to plot results. All steps are made to be executed in order, but independently of each other; results are stored on disk once the step finished. This means that for a different training configuration, the previously stored results of the caching step and the transformation step can be used, and do not have to be computed again.
+
 \subsubsection{Caching}
+In the caching step, the raw images of the data-set are re-sized, gray-scaled and stored in a consistent data format.
+
+See Figure~\ref{fig:caching-steps} for the steps that are taken during the caching process.
+
+\begin{figure}[h]
+    \centering
+    % \tikzset{%
+    %   >={Latex[width=2mm,length=2mm]},
+    %   % Specifications for style of nodes:
+    %             base/.style = {rectangle, rounded corners, draw=black,
+    %                           minimum width=4cm, minimum height=1cm,
+    %                           text centered, font=\sffamily},
+    %   activityStarts/.style = {base, fill=blue!30},
+    %       startstop/.style = {base, fill=red!30},
+    %     activityRuns/.style = {base, fill=green!30},
+    %          process/.style = {base, minimum width=2.5cm, fill=orange!15,
+    %                           font=\ttfamily},
+    % }
+    \tikzstyle{every node}=[rectangle, rounded corners, draw=black,
+                               minimum width=4cm, minimum height=1cm,
+                               text centered, font=\sffamily]
+    \begin{tikzpicture}[
+        node distance=1.5cm,
+        every node/.style={fill=white, font=\sffamily},
+        process/.style={rectangle, rounded corners, draw=black,
+                              minimum width=3cm, minimum height=1cm,
+                              text centered},
+        image/.style={rectangle, draw=black,
+                              minimum width=1.5cm, minimum height=0.75cm,
+                              text centered, font=\sffamily},
+        align=center]
+    % Specification of nodes (position, etc.)
+    \node (start)             [process]              {Input: $image$};
+    \node (resize)     [below of=start]          {\textsc{resize()}};
+    \node (rgb2gray)      [below of=resize]   {\textsc{rgb2gray()}};
+    \node (preparedImage)     [image, below of=rgb2gray]   {$cachable\_image$};
+    \node (img_as_bool)    [right of=preparedImage, xshift=4cm]{\textsc{img\_as\_bool()}};
+    \node (imsave)      [below of=preparedImage] {\textsc{imsave()}};
+    \node (end)      [process, below of=imsave] {Image cached};
+    % Specification of lines between nodes specified above
+    % with aditional nodes for description 
+    \draw[->]       (start)         -- (resize);
+    \draw[->]       (resize)        -- (rgb2gray);
+    \draw[->]       (rgb2gray)      -- (preparedImage);
+    \draw[densely dotted,->]       (rgb2gray) -| node[text width=2.5cm] {Image is `$groundtruth$` type} (img_as_bool);
+    \draw[->]       (preparedImage) -- (imsave);
+    \draw[densely dotted,->]       (img_as_bool)-- (preparedImage);
+    \draw[->]       (imsave) -- (end);
+    \end{tikzpicture}
+    
+    % \tikzstyle{every node}=[draw=black,thick,anchor=west]
+    % \begin{tikzpicture}[%
+    %   grow via three points={one child at (0.5,-0.7) and
+    %   two children at (0.5,-0.7) and (0.5,-1.4)},
+    %   edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+    %   \node {project}
+    %     child { node {cache\_35x70}
+    %         child { node {groundtruth}}
+    %         child { node {supervised}}
+    %         child { node {unsupervised}}
+    %     }
+    %     child [missing] {}
+    %     child [missing] {}
+    %     child [missing] {}
+    %     child { node {cache\_50x100}}
+    %     child { node {cache\_100x200}}
+    %     child { node {cache\_140x280}}
+    %     child { node {cache\_175x350}}
+    %     child { node {cache\_350x700}}
+    %     child { node {cache\_525x1050}};
+    % \end{tikzpicture}
+    \caption{Individual image caching steps.
+    }\label{fig:caching-steps}
+\end{figure}
+
+
+
+
 \subsubsection{Transforming}
 \subsubsection{Training}
 \subsubsection{Testing}
