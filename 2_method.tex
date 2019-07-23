@@ -27,21 +27,6 @@ See Figure~\ref{fig:caching-steps} for the steps that are taken during the cachi
 
 \begin{figure}[h]
     \centering
-    % \tikzset{%
-    %   >={Latex[width=2mm,length=2mm]},
-    %   % Specifications for style of nodes:
-    %             base/.style = {rectangle, rounded corners, draw=black,
-    %                           minimum width=4cm, minimum height=1cm,
-    %                           text centered, font=\sffamily},
-    %   activityStarts/.style = {base, fill=blue!30},
-    %       startstop/.style = {base, fill=red!30},
-    %     activityRuns/.style = {base, fill=green!30},
-    %          process/.style = {base, minimum width=2.5cm, fill=orange!15,
-    %                           font=\ttfamily},
-    % }
-    \tikzstyle{every node}=[rectangle, rounded corners, draw=black,
-                               minimum width=4cm, minimum height=1cm,
-                               text centered, font=\sffamily]
     \begin{tikzpicture}[
         node distance=1.5cm,
         every node/.style={fill=white, font=\sffamily},
@@ -70,28 +55,6 @@ See Figure~\ref{fig:caching-steps} for the steps that are taken during the cachi
     \draw[densely dotted,->]       (img_as_bool)-- (preparedImage);
     \draw[->]       (imsave) -- (end);
     \end{tikzpicture}
-    
-    % \tikzstyle{every node}=[draw=black,thick,anchor=west]
-    % \begin{tikzpicture}[%
-    %   grow via three points={one child at (0.5,-0.7) and
-    %   two children at (0.5,-0.7) and (0.5,-1.4)},
-    %   edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
-    %   \node {project}
-    %     child { node {cache\_35x70}
-    %         child { node {groundtruth}}
-    %         child { node {supervised}}
-    %         child { node {unsupervised}}
-    %     }
-    %     child [missing] {}
-    %     child [missing] {}
-    %     child [missing] {}
-    %     child { node {cache\_50x100}}
-    %     child { node {cache\_100x200}}
-    %     child { node {cache\_140x280}}
-    %     child { node {cache\_175x350}}
-    %     child { node {cache\_350x700}}
-    %     child { node {cache\_525x1050}};
-    % \end{tikzpicture}
     \caption{Individual image caching steps.
     }\label{fig:caching-steps}
 \end{figure}
