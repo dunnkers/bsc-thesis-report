@@ -41,25 +41,27 @@ See Figure~\ref{fig:caching-steps} for the steps that are taken during the cachi
     \node (start)             [process]              {Input: $image$};
     \node (resize)     [below of=start]          {\textsc{resize()}};
     \node (rgb2gray)      [below of=resize]   {\textsc{rgb2gray()}};
-    \node (preparedImage)     [image, below of=rgb2gray]   {$cachable\_image$};
-    \node (img_as_bool)    [right of=preparedImage, xshift=4cm]{\textsc{img\_as\_bool()}};
-    \node (imsave)      [below of=preparedImage] {\textsc{imsave()}};
+    \node (img_as_ubyte)      [below of=rgb2gray]   {\textsc{img\_as\_ubyte()}};
+    \node (img_as_bool)    [right of=img_as_ubyte, xshift=4cm]{\textsc{img\_as\_bool()}};
+    \node (imsave)      [below of=img_as_ubyte] {\textsc{imsave()}};
     \node (end)      [process, below of=imsave] {Image cached};
     % Specification of lines between nodes specified above
     % with aditional nodes for description 
     \draw[->]       (start)         -- (resize);
     \draw[->]       (resize)        -- (rgb2gray);
-    \draw[->]       (rgb2gray)      -- (preparedImage);
+    \draw[->]       (rgb2gray)      -- (img_as_ubyte);
+    \draw[->]       (img_as_ubyte)      -- (imsave);
     \draw[densely dotted,->]       (rgb2gray) -| node[text width=2.5cm] {Image is `$groundtruth$` type} (img_as_bool);
-    \draw[->]       (preparedImage) -- (imsave);
-    \draw[densely dotted,->]       (img_as_bool)-- (preparedImage);
+    \draw[densely dotted,->]       (img_as_bool)-- (img_as_ubyte);
     \draw[->]       (imsave) -- (end);
     \end{tikzpicture}
     \caption{Individual image caching steps.
     }\label{fig:caching-steps}
 \end{figure}
 
+Different caches are built with various pixel configurations of different scaling factors. Images are down-scaled with various factors, ranging from $3.0/4.0$ to a factor of $1.0/20.0$.
 
+Noticeable in the figure is that $groundtruth$ images get an extra step before saving. This is because the data-set $groundtruth$ images are not binary. 
 
 
 \subsubsection{Transforming}
