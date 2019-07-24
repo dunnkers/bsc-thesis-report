@@ -11,18 +11,24 @@ The pipeline built in the study has a sequence of steps. First, re-sized and re-
 Python is a common platform for data-science projects. Since a broad range of tools and packages are available in this ecosystem, the pipeline is written in Python.
 
 \subsection{Support libraries}
-The pipeline makes use of preexisting tools in order to help with common tasks. In order to read, write, and process images the scikit-image library \citep{van2014scikit} is used. This library has built-in functions to re-size and re-scale images, as well as convert images between different data type formats, e.g. converting $float64$ image datatypes to $uint8$. Scikit-image also facilitates RGB- to gray-scale color conversion.
+% Using scikit-image
+The pipeline makes use of preexisting tools in order to help with common tasks. In order to read, write, and process images the scikit-image library \citep{van2014scikit} is used. This library has built-in functions to re-size and re-scale images, as well as convert images between different data type formats, e.g. converting $float64$ image data-types to $uint8$. Scikit-image also facilitates RGB- to gray-scale color conversion.
 
+% scikit-learn
 Next, in order to run existing classification models and other common machine-learning related tasks, such as transforming the data or analyzing test results, the scikit-learn library \citep{scikit-learn} is used.
 
+% Numpy
 Lastly, Numpy \citep{van2011numpy} is used for creating and altering arrays as well as working with n-dimensional arrays.
 
 \subsection{Pipeline}
+% There are four steps in the pipeline.
 The pipeline consists of four essential steps, with one optional visualization step in order to plot results. All steps are made to be executed in order, but independently of each other; results are stored on disk once the step finished. This means that for a different training configuration, the previously stored results of the caching step and the transformation step can be used, and do not have to be computed again.
 
 \subsubsection{Caching}
-In the caching step, the raw images of the data-set are re-sized, gray-scaled and stored in a consistent data format.
+% Re-sizing, gray-scaling & data type.
+In the caching step, the raw images of the data-set are re-sized, gray-scaled and stored in a consistent data type format.
 
+% Steps chart.
 See Figure~\ref{fig:caching-steps} for the steps that are taken during the caching process.
 
 \begin{figure}[h]
@@ -59,9 +65,11 @@ See Figure~\ref{fig:caching-steps} for the steps that are taken during the cachi
     }\label{fig:caching-steps}
 \end{figure}
 
-Different caches are built with various pixel configurations of different scaling factors. Images are down-scaled with various factors, ranging from $3.0/4.0$ to a factor of $1.0/20.0$.
+% Various caches used, plus standardizing img data type.
+Different caches are built with various pixel configurations of different scaling factors. Images are down-scaled with various factors, ranging from $3.0/4.0$ to a factor of $1.0/20.0$. Furthermore, a step is required to standardize the image data type, \textsc{img\_as\_ubyte()}, because not all images are ensured to be of the same data type. Not standardizing the image data type would lead to inconsistent results.
 
-Noticeable in the figure is that $groundtruth$ images get an extra step before saving. This is because the data-set $groundtruth$ images are not binary, see Figure~\ref{fig:gt-histogram}. Although most values lie at the $0.0$ or $1.0$ value-point, there also exist some values in between. Because there are relatively little values in between, we need a logarithmic scaled histogram in order to visualize them. In order to make the groundtruth images binary, a mapping method is used. An easy way is to cut the spectrum in half, allocating all values $< 0.5$ as $0$ and all values $>= 0.5$ as $1$. The skimage function $img_as_bool$ is used for this functionality.
+% Groundtruth image to binary conversion
+Noticeable in Figure~\ref{fig:caching-steps} is that $groundtruth$ images get an extra step before saving. This is because the data-set $groundtruth$ images are not binary, see Figure~\ref{fig:gt-histogram}.
 
 \begin{figure}[h]
   \centering
@@ -70,7 +78,43 @@ Noticeable in the figure is that $groundtruth$ images get an extra step before s
   }\label{fig:gt-histogram}
 \end{figure}
 
+% Cutting groundtruth histogram in half
+Although most values lie at the $0.0$ or $1.0$ value-point, there also exist some values in between. Because there are relatively little values in between, a logarithmic scaled histogram is needed in order to visualize them. In order to make the groundtruth images binary, a mapping method is used. An easy way is to cut the spectrum in half, allocating all values in the range $[0.0, 0.5]$ as $0$ and all values in the range $(0.5, 1.0]$ as $1$. The skimage function $img\_as\_bool$ is used for this functionality.
+
+% Several folders.
+Once caching is done, several directories have been created with correctly sized imaging. The imaging has a consistent data type and is suitable for transformations once cached.
+
 \subsubsection{Transforming}
+% Transform such that data can be trained. Then store using joblib.
+In the transformation step all caches are prepared such that the data can be trained. For every cache, which has its own image pixel configuration, a separate new prepared data file is written to disk using the joblib library \citep{varoquaux2009joblib}.
+
+% K-fold cross validation.
+First, the cache imaging data is divided in several folds using a $k$-fold split, in order to facilitate $k$-fold cross validation \citep{stone1974cross}. A shuffled $k$-fold split is made to ensure randomness between folds. Cross-validation is used to prevent over-fitting or selection biases. The \textsc{KFold.split()} function from the sklearn library is used to split the data-set into a $n\_splits$ amount of folds, where every fold has a selection of training- and test images.
+
+% Convert to vectors & sample.
+Secondly, for every fold, individual images of both the training- and test set are converted into vectors, by using a $2$-d to $1$-d translation. Then, the training set is sampled, in stratified fashion; for every image, a balanced amount of samples are taken between the two classes. This is to ensure that non- road-marking pixels or road-marking pixels are not over- or underrepresented. A maximum of $max\_sample\_size$ amount of samples are taken per training-image. A minimum cannot be set, since the samples are desired to be balanced, and there exist no assurance that there exist any road-marking pixels in any image at all.
+
+% sv & usv 2-feature vector
+Thirdly, the data of the supervised- and the unsupervised approach are combined. For every pixel location, the value of both the supervised- and unsupervised approach are taken, and combined into a $2$-feature vector. Combining vector values from two sets is done using Numpy \textsc{stack} and \textsc{hstack} functions.
+
+% Show illustration of 2-feature vector.
+
+% Stack into 1D-arrays
+Lastly, all individual vectors representing the imaging are concatenated into large $1$-dimensional arrays representing training- and test data. The data is now in a format acceptable by sklearn classifiers for training.
+
 \subsubsection{Training}
+% BaggingClassifier
+The data-set is trained using several classifiers. In order to speed up training times and make use of parallelization speed-up opportunities, a \textit{BaggingClassifier} is wrapped around the designated classifier using parameter $n\_jobs=-1$ in order to utilize all system cores.
+
+% We get n_splits amount of classifiers. Store them to disk.
+Because each cache data-set is divided using a $k$-fold split in $n\_splits$ amount of folds, an $n\_splits$ amount of classifiers are trained for each cache. Once the classifier has been successfully trained, the fitted model is saved to disk, such that it can be used for testing.
+
 \subsubsection{Testing}
+% Load and predict
+In the test step we use our test-split data in order to predict new images and then validate our results. Previously trained classifiers are loaded from disk, along with the transformed test data. Then, binary values are predicted based on the combined supervised- and unsupervised $2$-feature vectors. An accuracy score is determined and a new $2$-d image is reconstructed based off the $1$-d predicted values vector. Predicted images and prediction accuracy statistics are saved to disk.
+
+% Remove this completely?
 \subsubsection{Visualization}
+% Optional step.
+Last to the pipeline is the visualization step, which exist to interpret our testing performance. It reads previously computed results from disk, to then visualize the data using matplotlib \citep{hunter2007matplotlib}.
+% Reference to matplotlib
