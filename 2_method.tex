@@ -31,7 +31,7 @@ In the caching step, the raw images of the data-set are re-sized, gray-scaled an
 % Steps chart.
 See Figure~\ref{fig:caching-steps} for the steps that are taken during the caching process.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{tikzpicture}[
         node distance=1.5cm,
@@ -48,7 +48,7 @@ See Figure~\ref{fig:caching-steps} for the steps that are taken during the cachi
     \node (resize)     [below of=start]          {\textsc{resize()}};
     \node (rgb2gray)      [below of=resize]   {\textsc{rgb2gray()}};
     \node (img_as_ubyte)      [below of=rgb2gray]   {\textsc{img\_as\_ubyte()}};
-    \node (img_as_bool)    [right of=img_as_ubyte, xshift=4cm]{\textsc{img\_as\_bool()}};
+    \node (img_as_bool)    [right of=img_as_ubyte, xshift=2.5cm]{\textsc{img\_as\_bool()}};
     \node (imsave)      [below of=img_as_ubyte] {\textsc{imsave()}};
     \node (end)      [process, below of=imsave] {Image cached};
     % Specification of lines between nodes specified above
@@ -71,7 +71,7 @@ Different caches are built with various pixel configurations of different scalin
 % Groundtruth image to binary conversion
 Noticeable in Figure~\ref{fig:caching-steps} is that $groundtruth$ images get an extra step before saving. This is because the data-set $groundtruth$ images are not binary, see Figure~\ref{fig:gt-histogram}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/groundtruth-histogram}
   \caption{Histogram of a groundtruth image in $log$ scale.

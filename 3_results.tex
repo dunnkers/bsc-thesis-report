@@ -1,18 +1,28 @@
 % !TEX root = report.tex
 
 \section{Results}\label{sec:results}
-Resultsssss!
+The data-set was tested under several configuration conditions. Different- pixels size configurations, classifiers and sample sizes were used, all using a $10$-fold cross validation setup. The study focused on two main classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. A per-cache accuracy box-plot is to be seen in Figure~\ref{fig:boxplot-svm}
 
-\begin{figure}[h]
+% Fold outliers.
+\begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=100,folds=5,clf=SVM-boxplot}
   \caption{Histogram of a groundtruth image in $log$ scale.
-  }\label{fig:svm}
+  }\label{fig:boxplot-svm}
 \end{figure}
 
-\begin{figure}[h]
+Shown in the figure is that mean accuracy does not fall below xx\% for any fold, and does not exceed xx\% for any fold.
+
+\begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=100,folds=5,clf=XGBoost-boxplot}
   \caption{Histogram of a groundtruth image in $log$ scale.
   }\label{fig:xgboost}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/prediction-comparison.png}
+  \caption{xx\% accuracy.
+  }\label{fig:comparison}
 \end{figure}
