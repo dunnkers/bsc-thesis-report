@@ -1,43 +1,84 @@
 % !TEX root = report.tex
 
 \section{Results}\label{sec:results}
-The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two main classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. Results are first explored for the SVM classifier, then for the XGBoost classifier.
+The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. Results regarding the SVM are first explored.
 
-A per-cache accuracy box-plot is to be seen in Figure~\ref{fig:boxplot-svm}
-
-Shown in the figure is that mean accuracy does not fall below xx\% for any fold, and does not exceed xx\% for any fold.
+% [SVM] Take a look at the overall accuracy.
+In order to first get a general idea of the overall performance of the \textit{Support Vector Machine}, a Violin chart containing accuracy scores of all images categorized by cache is first taken. A violin chart extends on a box-plot such that data distribution is better visible. See Figure~\ref{fig:svm-violinplot}.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-violinplot}
-  \caption{xx\% accuracy.
-  }\label{fig:accuracy-distribution}
+  \caption{SVM accuracy performance for total test-set of $1000$ images.
+  }\label{fig:svm-violinplot}
 \end{figure}
 
-\begin{figure}[ht]
-  \centering
-  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-boxplot}
-  \caption{Histogram of a groundtruth image in $log$ scale.
-  }\label{fig:xgboost}
-\end{figure}
+% Explain. Then; we need an accuracy distribution chart to better show what is going on.
+The plot shows, that although test accuracy is mostly distributed in the $[0.9, 1.0]$ range, accuracy scores are minimized at around the $0.2$ accuracy level. In order to get a better idea of how the accuracy scores are actually distributed, a histogram plot can provide better insight. A histogram is shown in Figure~\ref{fig:svm-histogram}, showing accuracy score distributions, along with a trend-line, in logarithmic scale.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-histogram}
-  \caption{xx\% accuracy.
-  }\label{fig:acc-vs-gt-fraction}
+  \caption{Histogram showing accuracy score distribution for all caches at a test-set of $1000$ images in \textit{logarithmic} scale.
+  }\label{fig:svm-histogram}
 \end{figure}
+
+% Explain distribution. Then; further exploring this issue, plotting a scatter-plot
+Plotting distribution in logarithmic scale allows for visualizing less frequent accuracy scores in the lower score ranges. A small amount of scores lie in the $[0.2, 0.8]$ range, with most scores above $0.9$. Because the lower score range form `outliers' in this result data-set, a certain parameter might be at cause for the low scoring. Although most imaging has actually has road-markings on it, some are actually void of any road marking pixels. In order to explore better a potential over-fit or under-fit, we plot the accuracy score against the amount of road marking pixels in an image. The amount of road marking pixels is represented as the fraction of road marking pixels compared to the non- road marking pixels in an image. See Figure~\ref{fig:svm-scatterplot}.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-scatterplot}
-  \caption{xx\% accuracy.
-  }\label{fig:acc-vs-gt-fraction}
+  \caption{Plotting accuracy score vs fraction of road marker pixels.
+  }\label{fig:svm-scatterplot}
 \end{figure}
+
+% Possible correlation? Plot one of those non- road marking images.
+In the chart is visible that a possible correlation exist between low accuracy scores and images with few road-marker pixels in them. There exist a clear vertical line with various levels of low-accuracy scoring, all at the $0.000$ fraction level. One such image, taken from the $175$x$350$ cache, is shown in Figure~\ref{fig:xgboost-prediction-dark-gt}.
+
+It can be observed that the ground truth depicted no road markings at all, but the fusion algorithm predicted almost the entire image as road-marking pixels nonetheless.
+
+\newpage
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-comparison}
-  \caption{xx\% accuracy.
-  }\label{fig:acc-vs-gt-fraction}
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-prediction-image752}
+  \caption{Low accuracy score of $27.92\%$ of an image with supposedly no road markings.
+  }\label{fig:xgboost-prediction-dark-gt}
 \end{figure}
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-prediction-image618}
+  \caption{A prediction with a high accuracy score of $97.96\%$.
+  }\label{fig:xgboost-prediction-good}
+\end{figure}
+
+
+% Plot a grouped boxplot with SVM/XGBoost compared.
+Now that we have seen the distributions of 
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-boxplot}
+  \caption{Histogram of a groundtruth image in $log$ scale.
+  }\label{fig:xgboost-boxplot}
+\end{figure}
+
+
+
+% Explain confusion matrix.
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-confusion-matrix}
+  \caption{xx\% accuracy.
+  }\label{fig:xgboost-confusion-matrix}
+\end{figure}
+
+% Results are first explored for the SVM classifier, then for the XGBoost classifier.
+
+% A per-cache accuracy box-plot is to be seen in Figure~\ref{fig:boxplot-svm}
+
+% Shown in the figure is that mean accuracy does not fall below xx\% for any fold, and does not exceed xx\% for any fold.
