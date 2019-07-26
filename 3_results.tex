@@ -1,36 +1,36 @@
 % !TEX root = report.tex
 
 \section{Results}\label{sec:results}
-The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. Results regarding the SVM are first explored.
+The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. General results of the prediction are first explored, using the \textit{XGBoost} classifier. Afterward a comparison between the two classifiers is made.
 
 % [SVM] Take a look at the overall accuracy.
-In order to first get a general idea of the overall performance of the \textit{Support Vector Machine}, a Violin chart containing accuracy scores of all images categorized by cache is first taken. A violin chart extends on a box-plot such that data distribution is better visible. See Figure~\ref{fig:svm-violinplot}.
+In order to first get a general idea of the overall performance of \textit{XGBoost}, a Violin chart containing accuracy scores of all images categorized by cache is first taken. A violin chart extends on a box-plot such that data distribution is better visible. See Figure~\ref{fig:xgboost-violinplot}.
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-violinplot}
-  \caption{SVM accuracy performance for total test-set of $1000$ images.
-  }\label{fig:svm-violinplot}
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-violinplot}
+  \caption{XGBoost accuracy performance for total test-set of $1000$ images.
+  }\label{fig:xgboost-violinplot}
 \end{figure}
 
 % Explain. Then; we need an accuracy distribution chart to better show what is going on.
-The plot shows, that although test accuracy is mostly distributed in the $[0.9, 1.0]$ range, accuracy scores are minimized at around the $0.2$ accuracy level. In order to get a better idea of how the accuracy scores are actually distributed, a histogram plot can provide better insight. A histogram is shown in Figure~\ref{fig:svm-histogram}, showing accuracy score distributions, along with a trend-line, in logarithmic scale.
+The plot shows, that although test accuracy is mostly distributed in the $[0.9, 1.0]$ range, accuracy scores are minimized at around the $0.2$ accuracy level. In order to get a better idea of how the accuracy scores are actually distributed, a histogram plot can provide better insight. A histogram is shown in Figure~\ref{fig:xgboost-histogram}, showing accuracy score distributions, along with a trend-line, in logarithmic scale.
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-histogram}
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-histogram}
   \caption{Histogram showing accuracy score distribution for all caches at a test-set of $1000$ images in \textit{logarithmic} scale.
-  }\label{fig:svm-histogram}
+  }\label{fig:xgboost-histogram}
 \end{figure}
 
 % Explain distribution. Then; further exploring this issue, plotting a scatter-plot
-Plotting distribution in logarithmic scale allows for visualizing less frequent accuracy scores in the lower score ranges. A small amount of scores lie in the $[0.2, 0.8]$ range, with most scores above $0.9$. Because the lower score range form `outliers' in this result data-set, a certain parameter might be at cause for the low scoring. Although most imaging has actually has road-markings on it, some are actually void of any road marking pixels. In order to explore better a potential over-fit or under-fit, we plot the accuracy score against the amount of road marking pixels in an image. The amount of road marking pixels is represented as the fraction of road marking pixels compared to the non- road marking pixels in an image. See Figure~\ref{fig:svm-scatterplot}.
+Plotting distribution in logarithmic scale allows for visualizing less frequent accuracy scores in the lower score ranges. A small amount of scores lie in the $[0.2, 0.8]$ range, with most scores above $0.9$. Because the lower score range form `outliers' in this result data-set, a certain parameter might be at cause for the low scoring. Although most imaging has actually has road-markings on it, some are actually void of any road marking pixels. In order to explore better a potential over-fit or under-fit, a plot of the accuracy score against the amount of road marking pixels in an image is explored. The amount of road marking pixels is represented as the fraction of road marking pixels compared to the non- road marking pixels in an image. See Figure~\ref{fig:xgboost-scatterplot}.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-scatterplot}
   \caption{Plotting accuracy score vs fraction of road marker pixels.
-  }\label{fig:svm-scatterplot}
+  }\label{fig:xgboost-scatterplot}
 \end{figure}
 
 % Possible correlation? Plot one of those non- road marking images.
@@ -47,18 +47,20 @@ It can be observed that the ground truth depicted no road markings at all, but t
   }\label{fig:xgboost-prediction-dark-gt}
 \end{figure}
 
-
+% W also have some good scores though.
+There, however, also exist some similarly challenging images with a significantly higher accuracy score, as to be seen in Figure~\ref{fig:xgboost-prediction-high-acc}
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-prediction-image618}
   \caption{A prediction with a high accuracy score of $97.96\%$.
-  }\label{fig:xgboost-prediction-good}
+  }\label{fig:xgboost-prediction-high-acc}
 \end{figure}
 
 
 % Plot a grouped boxplot with SVM/XGBoost compared.
-Now that we have seen the distributions of 
+Predictions of different accuracy levels were explored, all for the XGBoost classifier. We now compare the performance of both the SVM- and XGBoost classifiers in Figure~\ref{fig:classifiers-comparison}.
+
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-boxplot}
@@ -66,9 +68,8 @@ Now that we have seen the distributions of
   }\label{fig:xgboost-boxplot}
 \end{figure}
 
-
-
 % Explain confusion matrix.
+Lastly, a confusion matrix can be drawn with a comparison of true labeled classes vs. expected labels in Figure~\ref{fig:xgboost-confusion-matrix}
 
 \begin{figure}[ht]
   \centering
@@ -76,9 +77,3 @@ Now that we have seen the distributions of
   \caption{xx\% accuracy.
   }\label{fig:xgboost-confusion-matrix}
 \end{figure}
-
-% Results are first explored for the SVM classifier, then for the XGBoost classifier.
-
-% A per-cache accuracy box-plot is to be seen in Figure~\ref{fig:boxplot-svm}
-
-% Shown in the figure is that mean accuracy does not fall below xx\% for any fold, and does not exceed xx\% for any fold.
