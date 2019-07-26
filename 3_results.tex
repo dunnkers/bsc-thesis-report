@@ -1,22 +1,24 @@
 % !TEX root = report.tex
 
 \section{Results}\label{sec:results}
-The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two main classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. A per-cache accuracy box-plot is to be seen in Figure~\ref{fig:boxplot-svm}
+The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two main classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. Results are first explored for the SVM classifier, then for the XGBoost classifier.
+
+A per-cache accuracy box-plot is to be seen in Figure~\ref{fig:boxplot-svm}
 
 Shown in the figure is that mean accuracy does not fall below xx\% for any fold, and does not exceed xx\% for any fold.
-
-\begin{figure}[ht]
-  \centering
-  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-boxplot}
-  \caption{Histogram of a groundtruth image in $log$ scale.
-  }\label{fig:xgboost}
-\end{figure}
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-violinplot}
   \caption{xx\% accuracy.
   }\label{fig:accuracy-distribution}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-boxplot}
+  \caption{Histogram of a groundtruth image in $log$ scale.
+  }\label{fig:xgboost}
 \end{figure}
 
 \begin{figure}[ht]
@@ -29,6 +31,13 @@ Shown in the figure is that mean accuracy does not fall below xx\% for any fold,
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-scatterplot}
+  \caption{xx\% accuracy.
+  }\label{fig:acc-vs-gt-fraction}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-comparison}
   \caption{xx\% accuracy.
   }\label{fig:acc-vs-gt-fraction}
 \end{figure}
