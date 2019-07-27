@@ -104,17 +104,22 @@ Lastly, all individual vectors representing the imaging are concatenated into la
 
 \subsubsection{Training}
 % BaggingClassifier
-The data-set is trained using several classifiers. In order to speed up training times and make use of parallelization speed-up opportunities, a \textit{BaggingClassifier} is wrapped around the designated classifier using parameter $n\_jobs=-1$ in order to utilize all system cores.
+The data-set is trained using several classifiers. In order to speed up training times and make use of parallelization speed-up opportunities, a \textit{BaggingClassifier} is wrapped around the designated classifier using parameter $n\_jobs=-1$ in order to utilize all system cores. Regarding to training times, it is reasonable to notice that in the previous step data was sampled, such that regardless of cache all imaging have the same number of data-points that are to be trained.
 
 % We get n_splits amount of classifiers. Store them to disk.
-Because each cache data-set is divided using a $k$-fold split in $n\_splits$ amount of folds, an $n\_splits$ amount of classifiers are trained for each cache. Once the classifier has been successfully trained, the fitted model is saved to disk, such that it can be used for testing.
+Because each cache data-set is divided using a $k$-fold split in $n\_splits$ amount of folds, an $n\_splits$ amount of classifiers are trained for each cache. Once the classifier has been successfully trained, the fitted model is saved to disk, such that it can be used for testing. 
 
 \subsubsection{Testing}
 % Load and predict
-In the test step we use our test-split data in order to predict new images and then validate our results. Previously trained classifiers are loaded from disk, along with the transformed test data. Then, binary values are predicted based on the combined supervised- and unsupervised $2$-feature vectors. An accuracy score is determined and a new $2$-d image is reconstructed based off the $1$-d predicted values vector. Predicted images and prediction accuracy statistics are saved to disk.
+In the test step we use our test-split data in order to predict new images and then validate our results. Previously trained classifiers are loaded from disk, along with the transformed test data. Then, new binary values are predicted based on the combined supervised- and unsupervised $2$-feature vectors. An accuracy score is determined and a new $2$-d image is reconstructed based off the $1$-d predicted values vector. Predicted images and prediction accuracy statistics are saved to disk.
+
+% Cross-validation
+Because we are using a $k$-fold cross-validation setup, a total of $n\_splits$ analyses have to be ran. Following the setup of a $k$-fold cross-validation, all testing images available are tested using all folds. Total cache accuracy score is determined as a mean of all folds compared.
 
 % Remove this completely?
 \subsubsection{Visualization}
 % Optional step.
-Last to the pipeline is the visualization step, which exist to interpret our testing performance. It reads previously computed results from disk, to then visualize the data using matplotlib \citep{hunter2007matplotlib}.
-% Reference to matplotlib
+Last to the pipeline is the visualization step, which exist to interpret our testing performance. Because the test pipeline step is built to output mainly raw data in joblib format, this pipeline step exists as a unmissable component to our pipeline performance assertions.
+
+% How it works.
+It reads previously computed results from disk, which have been previously cached by the testing step. Then, data is transformed into several data structures to obtain a suitable data format for plotting. To then visualize the data matplotlib \citep{hunter2007matplotlib} is used. For some non-standard charts, requiring more advanced options, supplementary libraries \textit{Seaborn} and \textit{Pandas} \citep{mckinney-proc-scipy-2010} are used.
