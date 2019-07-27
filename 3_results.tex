@@ -48,7 +48,7 @@ In the chart is visible that a possible correlation exist between low accuracy s
 It can be observed that the ground truth depicted no road markings at all, but the fusion algorithm predicted almost the entire image as road-marking pixels nonetheless.
 
 % We also have some good scores though.
-There, however, also exist some similarly challenging images with a significantly higher accuracy score, as to be seen in Figure~\ref{fig:xgboost-prediction-high-acc}
+There, however, also exist some similarly challenging images with a significantly higher accuracy score, as to be seen in Figure~\ref{fig:xgboost-prediction-high-acc}.
 
 \begin{figure}[ht]
   \centering
@@ -59,35 +59,35 @@ There, however, also exist some similarly challenging images with a significantl
 
 \subsection{Classifier- and cache comparison}
 % Plot a grouped boxplot with SVM/XGBoost compared.
-Predictions of different accuracy levels were explored, all for the XGBoost classifier. Classifier performance is similar for most situations, therefore all individual metrics for the SVM classifier are not explored. Instead a comparison is drawn of the performance per-cache of the two classifiers. A box-plot categorical comparison is drawn, where every box-plot was supplied with the means of their respective folds, which means in the case of $n\_splits = 10$, there will be 10 data-points per box-plot. See Figure~\ref{fig:classifiers-comparison}.
+Predictions of different accuracy levels were explored, all for the XGBoost classifier. Classifier performance is similar for most situations, therefore all individual metrics for the SVM classifier are not explored. Instead a comparison is drawn of the performance per-cache of the two classifiers. A box-plot categorical comparison is drawn, where every box-plot was supplied with the means of their respective folds, which means in the case of $n\_splits = 10$, there will be 10 data-points per box-plot. See Figure~\ref{fig:classifiers-cache-perfomance}.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-classifiers-cache-performance}
   \caption{Classifiers performance comparison, taken using the means for every split, for $n\_splits = 10$; resulting in 10 data-points per bar.
-  }\label{fig:classifiers-comparison}
+  }\label{fig:classifiers-cache-perfomance}
 \end{figure}
 
 % Note we are missing 1 metric for SVM. Explain.
 Important to note is the fact that for the $525$x$1050$ cache, results are only obtained for XGBoost. This is due to the very high testing times of the SVM classifier when large pixel size configurations come into play. Although training times for both classifiers remain somewhat constant despite increasing pixel sizes, testing times per image get significantly higher with higher pixel size configurations. The reason for this is that the training set is sampled, reducing the amount of pixels that are used for training, which applies to all pixel configurations. A max amount of samples of $max\_samples$ are taken per image. In testing, however, an increase in pixel size means a significant increase in total data-points that have to be predicted. Classifier- and pipeline CPU performance is further explored in Section~\ref{sec:pipeline-performance}.
 
 % Explore cache performance
-To get a better understanding of what exactly the performance of the individual caches are, a plot with aggregated classifiers is required. In the following plot, data-points are not categorized by classifier, aggregating all results in order to obtain a per-cache performance chart. See Figure~\ref{fig:cache-performance}
+To get a better understanding of what exactly the performance of the individual caches are, a plot with aggregated classifiers is required. In the following plot, data-points are not categorized by classifier, aggregating all results in order to obtain a per-cache performance chart. See Figure~\ref{fig:cache-performance}.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-cache-performance}
-  \caption{Per-cache mean accuracy score chart.
+  \caption{Per-cache score chart, obtained by taking the mean of every fold, for both classifiers aggregated.
   }\label{fig:cache-performance}
 \end{figure}
 
 % Explore classifier performance
-To get a better understanding on the other hand of the individual classifier performance, a chart depicting classifier performance with aggregated cache results is necessary. See Figure~\ref{fig:classifier-performance}
+To get a better understanding on the other hand of the individual classifier performance, a chart depicting classifier performance with aggregated cache results is necessary. See Figure~\ref{fig:classifier-performance}.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-classifiers-performance}
-  \caption{Per-classifier mean accuracy score chart.
+  \caption{Cache data aggregated into classifier categories plotted against accuracy score. \textit{SVM} showing a median of $0.9454$ and mean of $0.9442$. \textit{XGBoost} showing a median of $0.9473$ and mean of $0.9454$.
   }\label{fig:classifier-performance}
 \end{figure}
 
@@ -109,12 +109,12 @@ Shown by the confusion matrices is that XGBoost classifies more data-points as n
 Pipeline performance is an important aspect in the perspective of scalability. The pipeline was optimized by enabling parallel-computing computations as much as possible. This includes caching multiple images simultaneously, training using a \textit{BaggingClassifier} and thus enabling using multiple cores using $n\_jobs=-1$ and enabling parallel estimation again by setting $n\_jobs=-1$ on classifier instances.
 
 % Cache is kinda fast already, not an integral part.
-The cache pipeline step executes at reasonable speed, and at foremost- is a one-time process. Once images have been cached, different training- and testing configurations can be used without re-generating the cache. For this reason only the transformation, training and testing pipeline steps were bench-marked, since they form the most integral part to the pipeline's performance. See Figure~\ref{fig:pipeline-performance}
+The cache pipeline step executes at reasonable speed, and at foremost- is a one-time process. Once images have been cached, different training- and testing configurations can be used without re-generating the cache. For this reason only the transformation, training and testing pipeline steps were bench-marked, since they form the most integral part to the pipeline's performance. See Figure~\ref{fig:pipeline-performance}.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-pipeline-performance.svg}
-  \caption{Pipeline performance chart.
+  \caption{Pipeline performance using an Intel Core i7-3820 Quad CPU @ 3.60GHz, running 64-bit Ubuntu 19.04 system at 8,0 GiB RAM.
   }\label{fig:pipeline-performance}
 \end{figure}
 
