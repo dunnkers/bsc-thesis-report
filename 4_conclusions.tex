@@ -1,10 +1,17 @@
 % !TEX root = report.tex
 
 \section{Conclusions}\label{sec:conclusions}
-In the study a fusion algorithm between two existing algorithms was presented. The new fusion approach was then tested under several conditions. Two different classifiers were tested, ran under different configurations of cached image pixel sizes. $8$ different configurations were tested in total, for which the last configuration, the 525x1050 was only tested for \textit{XGBoost}, because \textit{SVM} was too slow to predict in this case.
+In the study a fusion algorithm between two existing algorithms was presented. The new fusion approach was then tested under several conditions. Two different classifiers were tested, ran under different configurations of cached image pixel sizes. $8$ different configurations were tested in total, for which the last configuration, the 525x1050 was only tested for \textit{XGBoost}, because \textit{SVM} was too slow to predict in this case. All configurations were tested using a $10$-fold cross validation setup.
+
+Accuracy scores for both classifiers were distributed mostly around the $[0.94, 0.99]$ accuracy score range, with outlying scores down to $0.15$. Very low (outlier) accuracy scores were correlated with the fraction of road marking pixels in an image. This observation is made in Figure~\ref{fig:xgboost-scatterplot}; outlier accuracy scores are likely when groundtruth- images show no road-markings.
+
+Having explored overall results, an optimal- pixel configuration and classifier are reasoned.
 
 \subsection{Optimal pixel configuration}
-Observing the classifier comparison chart, Figure~\ref{fig:classifiers-comparison}, it is shown that for the many cache configurations, the 50x100 and the 350x700 configurations show high mean accuracy and reasonably sized spread. An overall best performer is the 350x700 configuration, with a mean accuracy of both classifiers above $95\%$.
+Observing the classifier comparison chart, Figure~\ref{fig:classifiers-comparison}, it is shown that for all cache configurations, the 50x100 and the 350x700 configurations show high mean accuracy and reasonably sized spread. An overall best performer is the 350x700 configuration, with a mean accuracy of both classifiers above $95\%$.
 
 \subsection{Optimal classifier}
 Observing again the classifier comparison chart, Figure~\ref{fig:classifiers-comparison}, it is also shown that for most caches XGBoost shows more variance, but a higher mean accuracy. Given also the much higher performance in speed of XGBoost, XGBoost becomes the most favorable classifier for this problem.
+
+\subsection{Speed and accuracy trade-off}
+% How does speed compare to accuracy, is there a trade-off?

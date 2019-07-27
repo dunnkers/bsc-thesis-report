@@ -3,7 +3,8 @@
 \section{Results}\label{sec:results}
 The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. General results of the prediction are first explored, using the \textit{XGBoost} classifier. Afterward a comparison between the two classifiers is made.
 
-% [SVM] Take a look at the overall accuracy.
+\subsection{XGBoost Classifier}
+% Take a look at the overall accuracy.
 In order to first get a general idea of the overall performance of \textit{XGBoost}, a Violin chart containing accuracy scores of all images categorized by cache is first taken. A violin chart extends on a box-plot such that data distribution is better visible. See Figure~\ref{fig:xgboost-violinplot}.
 
 \begin{figure}[ht]
@@ -47,7 +48,7 @@ It can be observed that the ground truth depicted no road markings at all, but t
   }\label{fig:xgboost-prediction-dark-gt}
 \end{figure}
 
-% W also have some good scores though.
+% We also have some good scores though.
 There, however, also exist some similarly challenging images with a significantly higher accuracy score, as to be seen in Figure~\ref{fig:xgboost-prediction-high-acc}
 
 \begin{figure}[ht]
@@ -57,9 +58,12 @@ There, however, also exist some similarly challenging images with a significantl
   }\label{fig:xgboost-prediction-high-acc}
 \end{figure}
 
-
+\subsection{Classifier comparison}
 % Plot a grouped boxplot with SVM/XGBoost compared.
-Predictions of different accuracy levels were explored, all for the XGBoost classifier. We now compare the performance of both the SVM- and XGBoost classifiers in Figure~\ref{fig:classifiers-comparison}.
+Predictions of different accuracy levels were explored, all for the XGBoost classifier. Classifier performance is similar for most situations, therefore all individual metrics for the SVM classifier are not explored. Instead a comparison is drawn of the performance of the two classifiers. A box-plot categorical comparison is drawn, where every box-plot was supplied with the means of their respective folds, which means in the case of $n\_splits = 10$, there will be 10 data-points per box-plot. See Figure~\ref{fig:classifiers-comparison}.
+
+% Note we are missing 1 metric for SVM. Explain.
+Important to note is the fact that for the $525$x$1050$ cache, results are only obtained for XGBoost. This is due to the very high testing times of the SVM classifier when large pixel size configurations come into play. Although training times for both classifiers remain somewhat constant despite increasing pixel sizes, testing times per image get significantly higher with higher pixel size configurations. The reason for this is that the training set is sampled, reducing the amount of pixels that are used for training, which applies to all pixel configurations. A max amount of samples of $max\_samples$ are taken per image. In testing, however, an increase in pixel size means a significant increase in total data-points that have to be predicted. Classifier- and pipeline CPU performance is further explored in Section~\ref{sec:pipeline-performance}.
 
 \begin{figure}[ht]
   \centering
@@ -68,12 +72,30 @@ Predictions of different accuracy levels were explored, all for the XGBoost clas
   }\label{fig:classifiers-comparison}
 \end{figure}
 
-% Explain confusion matrix.
-Lastly, a confusion matrix can be drawn with a comparison of true labeled classes vs. expected labels in Figure~\ref{fig:xgboost-confusion-matrix}
+% Confusion matrix.
+In order to further explore the statistical difference in also the error made by both classifiers, a confusion-matrix is used, drawing a comparison of true labeled classes vs. expected labels. All output images of the designated cache and all its according groundtruth images are taken into consideration. Every predicted data-point is then compared to its true value - in the case of the $175$x$350$ cache $61.250,000$ million data-points are compared. XGBoost- and SVM confusion matrices are presented in Figures- \ref{fig:xgboost-confusion-matrix} and \ref{fig:svm-confusion-matrix} respectively.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-confusion-matrix}
-  \caption{xx\% accuracy.
+  \caption{XGBoost confusion matrix for the $175$x$350$ cache.
   }\label{fig:xgboost-confusion-matrix}
 \end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-confusion-matrix}
+  \caption{SVM confusion matrix for the $175$x$350$ cache.
+  }\label{fig:svm-confusion-matrix}
+\end{figure}
+
+Shown by the confusion matrices is that XGBoost classifies more data-points as non- road markings than the SVM classifier, even though it is actually a road-marker data-point. This in comparison to the prediction of the road-marker label, which the SVM classifier predicted wrongly more often, $0.0598$ scoring vs. $0.0575$ scoring. In overall both classifiers achieve an accuracy score of approximately $0.94$ for the $175$x$350$ cache.
+
+\subsection{Pipeline performance}\label{sec:pipeline-performance}
+% A chart with transformation- / training- /and test performances.
+
+% Talk about how transformations get slower with increasing pixel sizes.
+
+% Talk about how training times remain somewhat constant.
+
+% Talk about how test times are through-the-roof when pixel size configurations increase.
