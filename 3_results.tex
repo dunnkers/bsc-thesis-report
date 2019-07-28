@@ -1,7 +1,7 @@
 % !TEX root = report.tex
 
 \section{Results}\label{sec:results}
-The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. General results of the prediction are first explored, using the \textit{XGBoost} classifier. Afterward a comparison between the two classifiers is made.
+The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. General results of the prediction are first explored, using the \textit{XGBoost} classifier. Afterward, a comparison between the two classifiers is made.
 
 \subsection{XGBoost Classifier}
 % Take a look at the overall accuracy.
@@ -15,17 +15,17 @@ In order to first get a general idea of the overall performance of \textit{XGBoo
 \end{figure}
 
 % Explain. Then; we need an accuracy distribution chart to better show what is going on.
-The plot shows, that although test accuracy is mostly distributed in the $[0.9, 1.0]$ range, accuracy scores are minimized at around the $0.2$ accuracy level. In order to get a better idea of how the accuracy scores are actually distributed, a histogram plot can provide better insight. A histogram is shown in Figure~\ref{fig:xgboost-histogram}, showing accuracy score distributions, along with a trend-line, in logarithmic scale.
+The plot shows, that although test accuracy is mostly distributed in the $[0.9, 1.0]$ range, accuracy scores are minimized at around the $0.2$ accuracy level. In pursuance of getting a better idea of how the accuracy scores are distributed, a histogram plot can provide better insight. A histogram is shown in Figure~\ref{fig:xgboost-histogram}, showing accuracy score distributions, along with a trend-line, in logarithmic scale.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-histogram}
-  \caption{Histogram showing accuracy score distribution for all caches at a test-set of $1000$ images in \textit{logarithmic} scale.
+  \caption{Histogram showing accuracy score distribution for all caches at a test-set of $1000$ images in $log$ scale.
   }\label{fig:xgboost-histogram}
 \end{figure}
 
 % Explain distribution. Then; further exploring this issue, plotting a scatter-plot
-Plotting distribution in logarithmic scale allows for visualizing less frequent accuracy scores in the lower score ranges. A small amount of scores lie in the $[0.2, 0.8]$ range, with most scores above $0.9$. Because the lower score range form `outliers' in this result data-set, a certain parameter might be at cause for the low scoring. Although most imaging has actually has road-markings on it, some are actually void of any road marking pixels. In order to explore better a potential over-fit or under-fit, a plot of the accuracy score against the amount of road marking pixels in an image is explored. The amount of road marking pixels is represented as the fraction of road marking pixels compared to the non- road marking pixels in an image. See Figure~\ref{fig:xgboost-scatterplot}.
+Plotting distribution in logarithmic scale allows for visualizing less frequent accuracy scores in the lower score ranges. A small amount of scores lie in the $[0.2, 0.8]$ range, with most scores above $0.9$. Because the lower score range form `outliers' in this result data-set, a certain parameter might be a cause for the low scoring. Although most imaging has road-markings on it, some images completely void of any road marking pixels. In order to explore better a potential over-fit or under-fit, a plot of the accuracy score against the amount of road marking pixels in an image is explored. The amount of road marking pixels is represented as the fraction of road marking pixels compared to the non- road marking pixels in an image. See Figure~\ref{fig:xgboost-scatterplot}.
 
 \begin{figure}[ht]
   \centering
@@ -35,12 +35,12 @@ Plotting distribution in logarithmic scale allows for visualizing less frequent 
 \end{figure}
 
 % Possible correlation? Plot one of those non- road marking images.
-In the chart is visible that a possible correlation exist between low accuracy scores and images with few road-marker pixels in them. There exist a clear vertical line with various levels of low-accuracy scoring, all at the $0.000$ fraction level. One such image, taken from the $175$x$350$ cache, is shown in Figure~\ref{fig:xgboost-prediction-dark-gt}. 
+In the chart is visible that a possible correlation exists between low accuracy scores and images with few road-marker pixels in them. There exist a clear vertical line with various levels of low-accuracy scoring, all at the $0.000$ fraction level. One such image, taken from the $175$x$350$ cache, is shown in Figure~\ref{fig:xgboost-prediction-dark-gt}. 
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth,height=\textwidth]{img/max_samples=200,folds=10,clf=XGBoost-prediction-image752}
-  \caption{Low accuracy score of $27.92\%$ of an image with supposedly no road markings.
+  \caption{Accuracy score of $29.42\%$ of an image with no road markings marked in its groundtruth.
   }\label{fig:xgboost-prediction-dark-gt}
 \end{figure}
 
@@ -53,13 +53,13 @@ There, however, also exist some similarly challenging images with a significantl
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-prediction-image631}
-  \caption{A prediction with a high accuracy score of $98.84\%$.
+  \caption{A prediction of an image with multiple road markings, yielding an accuracy score of $98.84\%$.
   }\label{fig:xgboost-prediction-high-acc}
 \end{figure}
 
 \subsection{Classifier- and cache comparison}
 % Plot a grouped boxplot with SVM/XGBoost compared.
-Predictions of different accuracy levels were explored, all for the XGBoost classifier. Classifier performance is similar for most situations, therefore all individual metrics for the SVM classifier are not explored. Instead a comparison is drawn of the performance per-cache of the two classifiers. A box-plot categorical comparison is drawn, where every box-plot was supplied with the means of their respective folds, which means in the case of $n\_splits = 10$, there will be 10 data-points per box-plot. See Figure~\ref{fig:classifiers-cache-perfomance}.
+Predictions of different accuracy levels were explored, all for the XGBoost classifier. Classifier performance is similar for most situations, therefore all individual metrics for the SVM classifier are not explored. Instead, a comparison is drawn off the performance per-cache of the two classifiers. A box-plot categorical comparison is drawn, where every box-plot was supplied with the means of their respective folds, which means in the case of $n\_splits = 10$, there will be 10 data-points per box-plot. See Figure~\ref{fig:classifiers-cache-perfomance}.
 
 \begin{figure}[ht]
   \centering
@@ -69,10 +69,10 @@ Predictions of different accuracy levels were explored, all for the XGBoost clas
 \end{figure}
 
 % Note we are missing 1 metric for SVM. Explain.
-Important to note is the fact that for the $525$x$1050$ cache, results are only obtained for XGBoost. This is due to the very high testing times of the SVM classifier when large pixel size configurations come into play. Although training times for both classifiers remain somewhat constant despite increasing pixel sizes, testing times per image get significantly higher with higher pixel size configurations. The reason for this is that the training set is sampled, reducing the amount of pixels that are used for training, which applies to all pixel configurations. A max amount of samples of $max\_samples$ are taken per image. In testing, however, an increase in pixel size means a significant increase in total data-points that have to be predicted. Classifier- and pipeline CPU performance is further explored in Section~\ref{sec:pipeline-performance}.
+Important to note is the fact that for the $525$x$1050$ cache, results are only obtained for XGBoost. This is due to the very high testing times of the SVM classifier when large pixel size configurations come into play. Although training times for both classifiers remain somewhat constant despite increasing pixel sizes, testing times per image get significantly higher with higher pixel size configurations. The reason for this is that the training set is sampled, reducing the number of pixels that are used for training, which applies to all pixel configurations. A max amount of samples of $max\_samples$ are taken per image. In testing, however, an increase in pixel size means a significant increase in total data-points that have to be predicted. Classifier- and pipeline CPU performance is further explored in Section~\ref{sec:pipeline-performance}.
 
 % Explore cache performance
-To get a better understanding of what exactly the performance of the individual caches are, a plot with aggregated classifiers is required. In the following plot, data-points are not categorized by classifier, aggregating all results in order to obtain a per-cache performance chart. See Figure~\ref{fig:cache-performance}.
+To get a better understanding of what exactly the performance of the individual caches are, a plot with aggregated classifiers is required. In the following plot, data-points are not categorized by any classifier, aggregating all results such as to obtain a per-cache performance chart. See Figure~\ref{fig:cache-performance}.
 
 \begin{figure}[ht]
   \centering
@@ -92,7 +92,7 @@ To get a better understanding on the other hand of the individual classifier per
 \end{figure}
 
 % Confusion matrix.
-In order to further explore the statistical difference in also the error made by both classifiers, a confusion-matrix is used, drawing a comparison of true labeled classes vs. expected labels. All output images of the designated cache and all its according groundtruth images are taken into consideration. Every predicted data-point is then compared to its true value - in the case of the $175$x$350$ cache $61.250,000$ million data-points are compared. XGBoost- and SVM confusion matrices are presented in Figure- \ref{fig:confusion-matrices}.
+In order to further explore the statistical difference in also the error made by both classifiers, a confusion-matrix is used, drawing a comparison of true labeled classes vs. expected labels. All output images of the designated cache and all the according groundtruth images are taken into consideration. Every predicted data-point is then compared to its true value - in the case of the $175$x$350$ cache $61.250,000$ million data-points are compared. XGBoost- and SVM confusion matrices are presented in Figure- \ref{fig:confusion-matrices}.
 
 \begin{figure}[ht]
   \centering
@@ -102,14 +102,14 @@ In order to further explore the statistical difference in also the error made by
   }\label{fig:confusion-matrices}
 \end{figure}
 
-Shown by the confusion matrices is that XGBoost classifies more data-points as non- road markings than the SVM classifier, even though it is actually a road-marker data-point. This in comparison to the prediction of the road-marker label, which the SVM classifier predicted wrongly more often, $0.0598$ scoring vs. $0.0575$ scoring. In overall both classifiers achieve an accuracy score of approximately $0.94$ for the $175$x$350$ cache.
+Shown by the confusion matrices is that XGBoost classifies more data-points as non- road markings than the SVM classifier, even though it is a road-marker data-point. This in comparison to the prediction of the road-marker label, which the SVM classifier predicted wrongly more often, $0.0598$ scoring vs. $0.0575$ scoring. In overall both classifiers achieve an accuracy score of approximately $0.94$ for the $175$x$350$ cache.
 
 \subsection{Pipeline performance}\label{sec:pipeline-performance}
 % Pipeline is optimized..
 Pipeline performance is an important aspect in the perspective of scalability. The pipeline was optimized by enabling parallel-computing computations as much as possible. This includes caching multiple images simultaneously, training using a \textit{BaggingClassifier} and thus enabling using multiple cores using $n\_jobs=-1$ and enabling parallel estimation again by setting $n\_jobs=-1$ on classifier instances.
 
 % Cache is kinda fast already, not an integral part.
-The cache pipeline step executes at reasonable speed, and at foremost- is a one-time process. Once images have been cached, different training- and testing configurations can be used without re-generating the cache. For this reason only the transformation, training and testing pipeline steps were bench-marked, since they form the most integral part to the pipeline's performance. See Figure~\ref{fig:pipeline-performance}.
+The cache pipeline step executes at a reasonable speed, and at foremost- is a one-time process. Once images have been cached, different training- and testing configurations can be used without re-generating the cache. For this reason, only the transformation, training and testing pipeline steps were bench-marked, since they form the most integral part to the pipeline's performance. See Figure~\ref{fig:pipeline-performance}.
 
 \begin{figure}[ht]
   \centering
@@ -119,10 +119,10 @@ The cache pipeline step executes at reasonable speed, and at foremost- is a one-
 \end{figure}
 
 % Talk about how transformations get slower with increasing pixel sizes.
-Visible in the figure (Figure~\ref{fig:pipeline-performance}), is that transformation performance decreases in somewhat linear fashion. This is because pixel size configurations do not double, but rather increase with slightly smaller increments. Transformation performance is very fast up to the $175$x$350$ cache level. After this, performance slows down fast.
+Visible in the figure (Figure~\ref{fig:pipeline-performance}), is that transformation performance decreases in somewhat linear fashion. This is because of the fact that image width and height in increasingly large pixel size configurations are not doubled, but increased by smaller increments. Transformation performance is very fast up to the $175$x$350$ cache level. After this, performance slows down fast.
 
 % Talk about how training times remain somewhat constant.
-Training times, however, remain rather constant across the entire cache range. This is because classifiers train upon a sampled data-set, for which the sample size remains constant across all caches. It is visible though that \textit{SVM} takes longer to train than \textit{XGBoost}.
+Training times, however, remain rather constant across the entire cache range. This is because classifiers train upon a sampled data-set, for which the sample size remains constant across all caches. It is visible though, that \textit{SVM} takes longer to train than \textit{XGBoost}.
 
 % Talk about how test times are through-the-roof when pixel size configurations increase.
-Test times, however, are significantly impacted by pixel size configurations; for every increase in pixel size configuration, a significantly higher amount of pixel-values have to be predicted. Because of the great differences in test times, the pipeline test performance chart was depicted in \textit{logarithmic} scale. For the $525$x$1050$ pixel size configuration, a \textit{SVM} takes at least $158$ seconds to predict $1$ image, whilst \textit{XGBoost} takes $3$ seconds for the same case.
+Test times, however, are significantly impacted by pixel size configurations; for every increase in pixel size configuration, a significantly higher amount of pixel-values have to be predicted. Because of the great differences in test times, the pipeline test performance chart was depicted in a \textit{logarithmic} scale. For the $525$x$1050$ pixel size configuration, a \textit{SVM} takes at least $158$ seconds to predict $1$ image, whilst \textit{XGBoost} takes $3$ seconds for the same case.
