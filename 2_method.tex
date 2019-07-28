@@ -2,27 +2,27 @@
 
 \section{Method}\label{sec:method}
 % What is a ML pipeline
-Machine-learning is used in order to merge the two existing algorithms and predict new results. In order to generate reproducible results, a pipeline is used. In this pipeline, a number of steps are executed, each taking the output of the previous step as an input, and then generating new output. This makes for a modular and predictable sequence of steps generating a result.
+Machine-learning is used in to merge the two existing algorithms and predict new results. In order to generate reproducible results, a machine-learning pipeline is used. In this pipeline, a number of steps are executed, each taking the output of the previous step as an input, and then generating new output. This makes for a modular and predictable sequence of steps generating a result.
 
 % Explain pipeline steps
-The pipeline built in the study has a sequence of steps. First, re-sized and re-scaled versions of the data-set imaging are cached, such that this computationally expensive operation has to be ran only once. Next, the cached imaging is taken, and is transformed to the correct data-structure format in order to be trained by a machine-learning model. After the transformations the data-set is trained using a chosen classifier, storing the fitted classifier afterward. Taking the trained classifier, finally new results are predicted in the test step, storing the results afterward. Optionally, the results can be visualized by running an additional step in the pipeline.
+The pipeline built in the study has a sequence of steps. First, re-sized and re-scaled versions of the data-set imaging are cached, such that this computationally expensive operation has to be ran only once. Next, the cached imaging is taken, and is transformed to the correct data-structure format such that the data can be trained by a machine-learning model. After the transformations the data-set is trained using a chosen classifier, storing the fitted classifier afterward. Taking the trained classifier, finally new results are predicted in the test step, storing the results afterward. Optionally, the results can be visualized by running an additional step in the pipeline.
 
 % Implementation - python
-Python is a common platform for data-science projects. Since a broad range of tools and packages are available in this ecosystem, the pipeline is written in Python.
+Python is a common platform for data science projects. Since a broad range of tools and packages are available in this ecosystem, the pipeline is written in Python.
 
 \subsection{Support libraries}
 % Using scikit-image
-The pipeline makes use of preexisting tools in order to help with common tasks. In order to read, write, and process images the scikit-image library \citep{van2014scikit} is used. This library has built-in functions to re-size and re-scale images, as well as convert images between different data type formats, e.g. converting $float64$ image data-types to $uint8$. Scikit-image also facilitates RGB- to gray-scale color conversion.
+The pipeline makes use of preexisting tools to help with common tasks. In order to read, write, and process images the scikit-image library \citep{van2014scikit} is used. This library has built-in functions to re-size and re-scale images, as well as convert images between different data type formats, e.g. converting $float64$ image data-types to $uint8$. Scikit-image also facilitates RGB- to gray-scale color conversion.
 
 % scikit-learn
-Next, in order to run existing classification models and other common machine-learning related tasks, such as transforming the data or analyzing test results, the scikit-learn library \citep{scikit-learn} is used.
+Next, in order to run existing classification models and other common machine-learning related tasks, such as transforming the data or analyzing test results, the scikit-learn library \citep{scikit-learn} is used. 
 
 % Numpy
 Lastly, Numpy \citep{van2011numpy} is used for creating and altering arrays as well as working with n-dimensional arrays.
 
 \subsection{Pipeline}
 % There are four steps in the pipeline.
-The pipeline consists of four essential steps, with one optional visualization step in order to plot results. All steps are made to be executed in order, but independently of each other; results are stored on disk once the step finished. This means that for a different training configuration, the previously stored results of the caching step and the transformation step can be used, and do not have to be computed again.
+The pipeline consists of four essential steps, with one optional visualization step such that results can be plotted. All steps are made to be executed in order, but independently of each other; results are stored on disk once the step finished. This means that for a different training configuration, the previously stored results of the caching step and the transformation step can be used, and do not have to be computed again.
 
 \subsubsection{Caching}
 % Re-sizing, gray-scaling & data type.
@@ -79,47 +79,46 @@ Noticeable in Figure~\ref{fig:caching-steps} is that $groundtruth$ images get an
 \end{figure}
 
 % Cutting groundtruth histogram in half
-Although most values lie at the $0.0$ or $1.0$ value-point, there also exist some values in between. Because there are relatively little values in between, a logarithmic scaled histogram is needed in order to visualize them. In order to make the groundtruth images binary, a mapping method is used. An easy way is to cut the spectrum in half, allocating all values in the range $[0.0, 0.5]$ as $0$ and all values in the range $(0.5, 1.0]$ as $1$. The skimage function \textsc{img\_as\_bool()} is used for this functionality. Using a different technique for binary conversion, such as the \textsc{threshold\_yen()} threshold function from the skimage library, led to significantly worse results.
+Although most values lie at the $0.0$ or $1.0$ value-point, there also exist some values in between. Because there are relatively little values in between, a logarithmically scaled histogram is needed to visualize them. In order to make the groundtruth images binary, a mapping method is used. An easy way is to cut the spectrum in half, allocating all values in the range $[0.0, 0.5]$ as $0$ and all values in the range $(0.5, 1.0]$ as $1$. The skimage function \textsc{img\_as\_bool()} is used for this functionality. Using a different technique for binary conversion, such as the \textsc{threshold\_yen()} threshold function from the skimage library, led to significantly worse results.
 
 % Several folders.
 Once caching is done, several directories have been created with correctly sized imaging. The imaging has a consistent data type and is suitable for transformations once cached.
 
 \subsubsection{Transforming}
 % Transform such that data can be trained. Then store using joblib.
-In the transformation step all caches are prepared such that the data can be trained. For every cache, which has its own image pixel configuration, a separate new prepared data file is written to disk using the joblib library \citep{varoquaux2009joblib}.
+In the transformation step, all caches are prepared such that the data can be trained. For every cache, which has its own image pixel configuration, a separate new prepared data file is written to disk using the joblib library \citep{varoquaux2009joblib}.
 
 % K-fold cross validation.
-First, the cache imaging data is divided in several folds using a $k$-fold split, in order to facilitate $k$-fold cross validation \citep{stone1974cross}. A shuffled $k$-fold split is made to ensure randomness between folds. Cross-validation is used to prevent over-fitting or selection biases. The \textsc{KFold.split()} function from the sklearn library is used to split the data-set into a $n\_splits$ amount of folds, where every fold has a selection of training- and test images.
+First, the cache imaging data is divided into several folds using a $k$-fold split, in order to facilitate $k$-fold cross validation \citep{stone1974cross}. A shuffled $k$-fold split is made to ensure randomness between folds. Cross-validation is used to prevent over-fitting or selection biases. The \textsc{KFold.split()} function from the sklearn library is used to split the data-set into a $n\_splits$ amount of folds, where every fold has a selection of training- and test images.
 
 % Convert to vectors & sample.
-Secondly, for every fold, individual images of both the training- and test set are converted into vectors, by using a $2$-d to $1$-d translation. Then, the training set is sampled, in stratified fashion; for every image, a balanced amount of samples are taken between the two classes. This is to ensure that non- road-marking pixels or road-marking pixels are not over- or underrepresented. A maximum of $max\_sample\_size$ amount of samples are taken per training-image. A minimum cannot be set, since the samples are desired to be balanced, and there exist no assurance that there exist any road-marking pixels in any image at all.
+Secondly, for every fold, individual images of both the training- and test set are converted into vectors, by using a $2$-d to $1$-d translation. Then, the training set is sampled, in stratified fashion; for every image, a balanced amount of samples are taken between the two classes. This is to ensure that non- road-marking pixels or road-marking pixels are not over- or underrepresented. A maximum of $max\_sample\_size$ amount of samples are taken per training-image. A minimum cannot be set, since the samples are desired to be balanced, and there exists no assurance that there exist any road-marking pixels in any image at all.
 
 % sv & usv 2-feature vector
-Thirdly, the data of the supervised- and the unsupervised approach are combined. For every pixel location, the value of both the supervised- and unsupervised approach are taken, and combined into a $2$-feature vector. Combining vector values from two sets is done using Numpy \textsc{stack} and \textsc{hstack} functions.
+Thirdly, the data of the supervised- and the unsupervised approach are combined. For every pixel location, the value of both the supervised- and unsupervised approach are taken and combined into a $2$-feature vector. Combining vector values from two sets is done using Numpy \textsc{stack} and \textsc{hstack} functions.
 
 % Show illustration of 2-feature vector.
 
 % Stack into 1D-arrays
-Lastly, all individual vectors representing the imaging are concatenated into large $1$-dimensional arrays representing training- and test data. The data is now in a format acceptable by sklearn classifiers for training.
+Lastly, all individual vectors representing the imaging are concatenated into large $1$-dimensional arrays representing training- and test data. The data is then in a format acceptable by sklearn classifiers for training.
 
 \subsubsection{Training}
 % BaggingClassifier
-The data-set is trained using several classifiers. In order to speed up training times and make use of parallelization speed-up opportunities, a \textit{BaggingClassifier} is wrapped around the designated classifier using parameter $n\_jobs=-1$ in order to utilize all system cores. Regarding to training times, it is reasonable to notice that in the previous step data was sampled, such that regardless of cache all imaging have the same number of data-points that are to be trained.
+The data-set is trained using several classifiers. In order to speed up training times and make use of parallelization speed-up opportunities, a \textit{BaggingClassifier} is wrapped around the designated classifier using parameter $n\_jobs=-1$ such that all system cores can be utilized. Regarding to training times, it is reasonable to notice that in the previous step data was sampled, such that regardless of cache all imaging have the same number of data-points that are to be trained.
 
 % We get n_splits amount of classifiers. Store them to disk.
 Because each cache data-set is divided using a $k$-fold split in $n\_splits$ amount of folds, an $n\_splits$ amount of classifiers are trained for each cache. Once the classifier has been successfully trained, the fitted model is saved to disk, such that it can be used for testing. 
 
 \subsubsection{Testing}
 % Load and predict
-In the test step we use our test-split data in order to predict new images and then validate our results. Previously trained classifiers are loaded from disk, along with the transformed test data. Then, new binary values are predicted based on the combined supervised- and unsupervised $2$-feature vectors. An accuracy score is determined and a new $2$-d image is reconstructed based off the $1$-d predicted values vector. Predicted images and prediction accuracy statistics are saved to disk.
+In the test step, the test-split data is used to predict new images and then validate results. Previously trained classifiers are loaded from disk, along with the transformed test data. Then, new binary values are predicted based on the combined supervised- and unsupervised $2$-feature vectors. An accuracy score is determined and a new $2$-d image is reconstructed based on the $1$-d predicted values vector. Predicted images and prediction accuracy statistics are saved to disk.
 
 % Cross-validation
-Because we are using a $k$-fold cross-validation setup, a total of $n\_splits$ analyses have to be ran. Following the setup of a $k$-fold cross-validation, all testing images available are tested using all folds. Total cache accuracy score is determined as a mean of all folds compared.
+Because a $k$-fold cross-validation setup is used, a total of $n\_splits$ analyses have to be executed. Following the setup of a $k$-fold cross-validation, all testing images available are tested using all folds. Total cache accuracy score is determined as a mean of all folds compared.
 
-% Remove this completely?
 \subsubsection{Visualization}
 % Optional step.
-Last to the pipeline is the visualization step, which exist to interpret our testing performance. Because the test pipeline step is built to output mainly raw data in joblib format, this pipeline step exists as a unmissable component to our pipeline performance assertions.
+Last to the pipeline is the visualization step, which exists to interpret testing performance. Because the test pipeline step is built to output mainly raw data in joblib format, this pipeline step exists as an unmissable component to the pipeline performance assertions.
 
 % How it works.
 It reads previously computed results from disk, which have been previously cached by the testing step. Then, data is transformed into several data structures to obtain a suitable data format for plotting. To then visualize the data matplotlib \citep{hunter2007matplotlib} is used. For some non-standard charts, requiring more advanced options, supplementary libraries \textit{Seaborn} and \textit{Pandas} \citep{mckinney-proc-scipy-2010} are used.

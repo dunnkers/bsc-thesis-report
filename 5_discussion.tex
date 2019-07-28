@@ -1,22 +1,17 @@
 % !TEX root = report.tex
 
 \section{Discussion}\label{sec:discussion}
-Almost. There!!!!!
-
-% Possible points of critique are; sample size constant, just two classifiers,
-% data-set is large enough to train but might not cover all situations (different
-% types of road, different weather conditions), more data
-
-
+% We are going to look at bias.
+In the study, several circumstances that influenced test results might have been at play. Even though biasing has been attempted to be reduced as much as possible, for example the reduction of over- or under-fitting by using cross-validation, results most likely still have a certain bias.
 
 % Sample size was constant for all configurations
+A first point of critique might be of one parameter that remained constant throughout all tests, namely the $max\_samples$ parameter. The parameter determines the maximum amount of samples to be taken per image during transformation. First off all, sampling was done randomly; for each image a random set of samples of both the road-marker and non- road-marker class were taken. Due to this randomness, when enough images are sampled, the total data array will be large enough to present a truthful representation of all different pixel values. The process of randomly sampling pixel in an image is repeated multiple times for an image too - using 10-fold cross-validation any one image is sampled differently at least 9 times.
 
+% -> what if we did increase max.sample size, however?
+Of course, however, increasing the maximum samples taken could lead to a more robustly trained classifier, which would have been trained on a larger distribution of pixel values. Yet, increasing maximum sample size would have a large effect on memory used during training, leading to an increase in training times accordingly. In the test-setup used in this study no high-performance computing systems were available, models were thus trained on a consumer-grade computer; testing the 350x700 pixel size configuration cache using SVM on the designated system took 21.5 hours at 77 seconds per image despite utilizing multiple cores. Testing the entire 525x1050 cache would prospectively take 43.8 hours. Nevertheless, possibly when higher-performance system is used, larger maximum sample sizes can be tested.
 
 % Just two classifiers
-
+A second point of critique is the fact that the problem has only been asserted by 2 classifiers, SVM and XGBoost. The study took focus on these two main classifiers in order to keep fit within the scope of the study. These two classifiers are generally pretty well performing at the given classification task at hand. Within a larger study scope more classifiers could be tested on the problem to compare their performance, however, it has to be noted that to structurally improve performance, some other measure should probably be taken instead of only finding the most optimal classifier.
 
 % Data-set; large enough? a representative distribution? weather? more data?
-
-
-
-%
+Finally, the given data-set might have presented an unrepresentative distribution of road-imaging, such that the trained classifier is not well fit under different circumstances of imaging. The data-set contained imaging with both completely sun-brightened imaging and partly-shadowed imaging. It does seem, however, that the data-set weather conditions remain somewhat constant throughout the entire data-set. For this reason, the fitted model might be less well suited for non-sunny road images. In order to improve the model's versatility to classifying different road conditions, a data-set with lots of different weather conditions is best to be used. Also, lastly, the model in this study was trained using 1000 images. Increasing the size of the data-set might prove to make for better classifying results and get an overall more versatile fit on the data.
