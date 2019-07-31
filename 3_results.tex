@@ -110,7 +110,14 @@ Shown by the confusion matrices is that XGBoost classifies more data-points as n
 
 \subsection{Fusion algorithm using a 5-element feature vector}
 % How does the 5-element feature vector match up against the 2-element feature vector?
+An experiment using a 5-element feature vector was also run. As was explained in Section~\ref{sec:method_transforming}, a 5-element feature vector is constructed by combining the supervised- and unsupervised approach images and the input image RGB values. Visible in Figure~\ref{fig:5-element-fv-classifiers-cache-performance} is the overall prediction performance of the fusion algorithm using a 5-element feature vector. Noticeable is the fact that SVM performs significantly worse than XGBoost.
 
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/folds=10,fv=5-ELEMENT-classifiers-cache-performance}
+  \caption{5-element feature vector 10-fold prediction performance per pixel size configuration.
+  }\label{fig:5-element-fv-classifiers-cache-performance}
+\end{figure}
 
 \subsection{Approaches compared}
 % Comparing supervised, unsupervised, and fusion approach
@@ -120,14 +127,14 @@ In comparing the supervised-, unsupervised- and the newly built fusion approach,
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/cache=100x200,ic=supervised-aucroc}
+  \includesvg[width=\linewidth]{img/cache=350x700,ic=supervised-aucroc}
   \caption{.
   }\label{fig:supervised-aucroc}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/cache=100x200,ic=unsupervised-aucroc}
+  \includesvg[width=\linewidth]{img/cache=350x700,ic=unsupervised-aucroc}
   \caption{.
   }\label{fig:unsupervised-aucroc}
 \end{figure}
