@@ -95,9 +95,21 @@ First, the cache imaging data is divided into several folds using a $k$-fold spl
 Secondly, for every fold, individual images of both the training- and test set are converted into vectors, by using a $2$-d to $1$-d translation. Then, the training set is sampled, in stratified fashion; for every image, a balanced amount of samples are taken between the two classes. This is to ensure that non- road-marking pixels or road-marking pixels are not over- or underrepresented. A maximum of $max\_sample\_size$ amount of samples are taken per training-image. A minimum cannot be set, since the samples are desired to be balanced, and there exists no assurance that there exist any road-marking pixels in any image at all.
 
 % sv & usv 2-feature vector
-Thirdly, the data of the supervised- and the unsupervised approach are combined. For every pixel location, the value of both the supervised- and unsupervised approach are taken and combined into a $2$-feature vector. Combining vector values from two sets is done using Numpy \textsc{stack} and \textsc{hstack} functions.
+Thirdly, the data of the supervised- and the unsupervised approach are combined. For every pixel location, the value of both the supervised- and unsupervised approach are taken and combined into a $2$-feature vector, resulting in the following:
 
-% Show illustration of 2-feature vector.
+% Show illustration of 2-element feature vector.
+$$fv = \begin{pmatrix}sv & usv\end{pmatrix}$$
+
+% Combine using stack, hstack
+Where $sv$ and $usv$ are pixels corresponding to the supervised and unsupervised approach, respectively, and $fv$ is the constructed feature vector. Combining vector values from two sets is done using Numpy \textsc{stack} and \textsc{hstack} functions.
+
+% 5-element feature vector
+A different feature vector is formed conditionally, based upon a configuration preset constant called ``FEATURE\_VECTOR", which can have values of either ``2-ELEMENT" or ``5-ELEMENT". As values suggest, a 5-element feature vector can also be constructed. The 5-element feature vector consists out of the supervised- and unsupervised approach pixels, as well as the input image rgb values. A 5-element feature vector will look like the following:
+
+% Show illustration of 5-element feature vector.
+$$fv = \begin{pmatrix}sv & usv & src\_r & src\_g & src\_b\end{pmatrix}$$
+
+Where $src$ is a RGB pixel from the input image, of which each color value is inserted separately, and $fv$ is the constructed feature vector.
 
 % Stack into 1D-arrays
 Lastly, all individual vectors representing the imaging are concatenated into large $1$-dimensional arrays representing training- and test data. The data is then in a format acceptable by sklearn classifiers for training.
@@ -107,14 +119,20 @@ Lastly, all individual vectors representing the imaging are concatenated into la
 The data-set is trained using several classifiers. In order to speed up training times and make use of parallelization speed-up opportunities, a \textit{BaggingClassifier} is wrapped around the designated classifier using parameter $n\_jobs=-1$ such that all system cores can be utilized. Regarding to training times, it is reasonable to notice that in the previous step data was sampled, such that regardless of cache all imaging have the same number of data-points that are to be trained.
 
 % We get n_splits amount of classifiers. Store them to disk.
-Because each cache data-set is divided using a $k$-fold split in $n\_splits$ amount of folds, an $n\_splits$ amount of classifiers are trained for each cache. Once the classifier has been successfully trained, the fitted model is saved to disk, such that it can be used for testing. 
+Because each cache data-set is divided using a k-fold split in $n\_splits$ amount of folds, an $n\_splits$ amount of classifiers are trained for each cache. Once the classifier has been successfully trained, the fitted model is saved to disk, such that it can be used for testing. 
 
 \subsubsection{Testing}
 % Load and predict
-In the test step, the test-split data is used to predict new images and then validate results. Previously trained classifiers are loaded from disk, along with the transformed test data. Then, new binary values are predicted based on the combined supervised- and unsupervised $2$-feature vectors. An accuracy score is determined and a new $2$-d image is reconstructed based on the $1$-d predicted values vector. Predicted images and prediction accuracy statistics are saved to disk.
+In the test step, the test-split data is used to predict new images and then validate results. The testing step can, based on two configuration variables, both predict new pixel classes or predict new pixel probabilities. Previously trained classifiers are loaded from disk, along with the transformed test data.
+
+% Predict class
+If the class prediction configuration variable is enabled, new binary values are predicted based on the 2- or 5-element feature vectors. An accuracy score is determined and a new 2-d image is reconstructed based on the 1-d predicted values vector. Predicted images and prediction accuracy statistics are saved to disk.
+
+% Predict probability
+If the probability prediction configuration variable is enabled, the designated classifier is setup such that a new probability is predicted for each pixel. Of both the probability for a non- road marking pixel and a road-marking pixel, the probability for a pixel being a road-marker pixel is stored in a 2-d float formatted image.
 
 % Cross-validation
-Because a $k$-fold cross-validation setup is used, a total of $n\_splits$ analyses have to be executed. Following the setup of a $k$-fold cross-validation, all testing images available are tested using all folds. Total cache accuracy score is determined as a mean of all folds compared.
+Because a k-fold cross-validation setup is used, a total of $n\_splits$ analyses have to be executed. Following the setup of a k-fold cross-validation, all testing images available are tested using all folds. When class prediction is enabled, total cache accuracy score is determined as a mean of all folds compared.
 
 \subsubsection{Visualization}
 % Optional step.
