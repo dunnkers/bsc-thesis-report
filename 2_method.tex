@@ -84,7 +84,7 @@ Although most values lie at the $0.0$ or $1.0$ value-point, there also exist som
 % Several folders.
 Once caching is done, several directories have been created with correctly sized imaging. The imaging has a consistent data type and is suitable for transformations once cached.
 
-\subsubsection{Transforming}
+\subsubsection{Transforming}\label{sec:method_transforming}
 % Transform such that data can be trained. Then store using joblib.
 In the transformation step, all caches are prepared such that the data can be trained. For every cache, which has its own image pixel configuration, a separate new prepared data file is written to disk using the joblib library \citep{varoquaux2009joblib}.
 
