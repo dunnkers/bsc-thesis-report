@@ -92,7 +92,7 @@ To get a better understanding on the other hand of the individual classifier per
 \end{figure}
 
 % Confusion matrix.
-In order to further explore the statistical difference in also the error made by both classifiers, a confusion-matrix is used, drawing a comparison of true labeled classes vs. expected labels. All output images of the designated cache and all the according groundtruth images are taken into consideration. Every predicted data-point is then compared to its true value - in the case of the $175$x$350$ cache $61.250,000$ million data-points are compared. XGBoost- and SVM confusion matrices are presented in Figure- \ref{fig:confusion-matrices}.
+In order to further explore the statistical difference in also the error made by both classifiers, a confusion-matrix is used, drawing a comparison of true labeled classes vs. expected labels. All output images of the designated cache and all the according groundtruth images are taken into consideration. Every predicted data-point is then compared to its true value - in the case of the 350x700 cache $245.000,000$ million data-points are compared. XGBoost- and SVM confusion matrices are presented in Figure- \ref{fig:confusion-matrices}.
 
 \begin{figure}[ht]
   \centering
@@ -102,7 +102,9 @@ In order to further explore the statistical difference in also the error made by
   }\label{fig:confusion-matrices}
 \end{figure}
 
-Shown by the confusion matrices is that XGBoost classifies more data-points as non- road markings than the SVM classifier, even though it is a road-marker data-point. This in comparison to the prediction of the road-marker label, which the SVM classifier predicted wrongly more often, $0.0598$ scoring vs. $0.0575$ scoring. In overall both classifiers achieve an accuracy score of approximately $0.94$ for the $175$x$350$ cache.
+Shown by the confusion matrices is that XGBoost classifies more data-points as non- road markings than the SVM classifier, even though it is a road-marker data-point. This in comparison to the prediction of the road-marker label, which the SVM classifier predicted wrongly more often, $0.0441$ scoring vs. $0.0432$ scoring, for SVM and XGBoost respectively. In overall both classifiers achieve an accuracy score of approximately $0.95$ for the 350x700 cache; $0.9524$ for XGBoost and $0.9515$ for SVM to be specific.
+
+
 
 \subsection{Pipeline performance}\label{sec:pipeline-performance}
 % Pipeline is optimized..
