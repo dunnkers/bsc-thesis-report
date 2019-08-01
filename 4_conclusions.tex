@@ -4,10 +4,22 @@
 % We are tested 2 classifiers
 In the study, a fusion algorithm between two existing algorithms was presented. The new fusion approach was then tested under several conditions. The entire pipeline was run using two different feature-vectors; a 2-element feature vector, combining the supervised- and unsupervised approach, and a 5-element feature vector, additionally adding in the input image RGB values. For every feature-vector setup, two different classifiers were tested, ran under different configurations of cached image pixel sizes. 8 different pixel size configurations were tested in total. In the 2-element feature vector pipeline, the 525x1050 configuration was only tested for \textit{XGBoost}, because \textit{SVM} was too slow to predict in this case, see Section~\ref{sec:pipeline-performance}. In the 5-element feature vector pipeline the 350x700 configuration was too slow to predict using SVM. The 525x1050 configuration was too large for both classifiers in a 5-element feature vector setup. All configurations were tested using a $10$-fold cross-validation setup.
 
-% Overall results
-For both
+% Optimal cache and feature vector
+For both the 2-element feature vector and the 5-element feature vector accuracies are distributed across the [0.2, 0.99] range, with most distribution in the [0.93, 0.99] range, as seen in Figure~\ref{fig:xgboost-violinplot} and Figure~\ref{fig:5-element-fv-xgboost-violinplot}, respectively. For both feature vector presets the best performing pixel size configuration is 350x700, as can be seen in Figure~\ref{fig:cache-performance} and Figure~\ref{fig:5-element-fv-classifiers-cache-performance}.
 
-%% BEFORE ADDING A 5-ELEMENT FEATURE VECTOR AND AUC/ROC CHARTS
+% Bad performance & dark gt images correlation
+As was shown in Section~\ref{sec:results_2-elem-fv}, very low outlier accuracy scores for the 2-element feature vector approach showed correlation with imaging void of any road-markings. This means that the 2-element feature vector approach performs badly when presented with imaging of only road surface.
+
+% Optimal classifier
+For both feature vectors presets, XGBoost outperformed SVM for almost all pixel size configurations. For the 2-element feature vector, SVM showed a median accuracy score of 0.9454 whilst XGBoost showed a median accuracy score of 0.9473 when combining all pixel size configurations, as shown in Figure~\ref{fig:classifier-performance}. For the 5-element feature vector the difference was much greater and thus clearly visually visible; as shown in Figure~\ref{fig:5-element-fv-classifiers-cache-performance}, SVM median accuracy does not exceed 0.75, whilst XGBoost median accuracy score is no less than 0.90. XGBoost is the clear winner for the 5-element feature vector preset.
+
+% Compare 4 approaches
+Comparing the AUC score / ROC curve of the supervised- and unsupervised approach as well as the fusion approach using its 2-element and 5-element feature vector preset, it becomes clear that the Fusion approach using a 5-element feature vector obtains the highest AUC score. AUC scores and ROC curves are visible in Figure~\ref{fig:supervised-aucroc}, Figure~\ref{fig:unsupervised-aucroc}, Figure~\ref{fig:fusion-aucroc} and Figure~\ref{fig:5-element-fv-fusion-aucroc}. Supervised and unsupervised AUC scoring are 0.616 and 0.646, respectively. This means that the unsupervised approach the highest AUC score of the existing two approaches. The 2-element feature vector fusion approach has an AUC score of 0.635, which is lower than the unsupervised approach AUC score. The 5-element feature vector fusion approach AUC score, however, is higher than all others, at 0.685. AUC/ROC measurement was made using the best-performing pixel size configuration of 350x700.
+
+% Conclude
+Thus, the best approach by AUC score is the 5-element feature vector fusion approach.
+
+%%%%% BEFORE ADDING A 5-ELEMENT FEATURE VECTOR AND AUC/ROC CHARTS
 % % General results
 % Accuracy scores for both classifiers were distributed mostly around the $[0.94, 0.99]$ accuracy score range, with outlying scores down to $0.15$, as seen in Figure~\ref{fig:xgboost-violinplot}. Very low (outlier) accuracy scores were correlated with the fraction of road marking pixels in an image. This observation is made in Figure~\ref{fig:xgboost-scatterplot}; outlier accuracy scores are likely when groundtruth- images show no road-markings.
 
@@ -23,6 +35,6 @@ For both
 % % Classifier error-margin / speed trade-off.
 % It is worth noting that despite having a lower accuracy mean, the \textit{SVM} shows smaller error margins than \textit{XGBoost}. A higher overall accuracy score with slightly larger error margins might be worth the trade-off, however, since the \textit{SVM} is shown to take significantly longer in predicting images than \textit{XGBoost}. See Figure~\ref{fig:pipeline-performance} for this statistic. 
 
-% Accuracy- speed cache trade-off
-% NOTE. I forgot to take note of the fact that once a cache is trained, it can be used to predict *any* other cache sizes. Test time performance thus does not play such a big part in this.
+% % Accuracy- speed cache trade-off
+% % NOTE. I forgot to take note of the fact that once a cache is trained, it can be used to predict *any* other cache sizes. Test time performance thus does not play such a big part in this.
 % The same type of trade-off also plays a factor in choosing the correct cache for the task. Even though cache with pixel size configuration $350$x$700$ came out as the most favorable cache by performance, it might not be the best option when speed is a factor. Cache with pixel size configuration $50$x$100$ shows reasonable accuracy score performance of just underneath the $0.95$ level, with some error margin outliers but acceptable first- and third quartiles in the boxplot. Note that a $50$x$100$ pixel configuration contains $5000$ pixels whilst a $350$x$700$ contains $245000$, a factor $49.0$ increase. As shown per Figure~\ref{fig:pipeline-performance}, test speed decreases not linearly, but rather exponentially when cache size is increased.
