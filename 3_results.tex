@@ -3,12 +3,12 @@
 \section{Results}\label{sec:results}
 In the results, first the performance of the fusion algorithm is explored using a 2-element feature vector. Next, the 5-element feature vector fusion algorithm performance is analyzed and compared to the 2-element feature vector. Then, an analysis is made on the difference in performance between the supervised, unsupervised and fusion approach. Lastly, pipeline performance measurements are taken into consideration.
 
-\subsection{Fusion algorithm using a 2-element feature vector}
+\subsection{Fusion algorithm using a 2-element feature vector}\label{sec:results_2-elem-fv}
 The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. General results of the prediction are first explored, using the \textit{XGBoost} classifier. Afterward, a comparison between the two classifiers is made.
 
 \subsubsection{Overall performance using the XGBoost Classifier}
 % Take a look at the overall accuracy.
-In order to first get a general idea of the overall performance of \textit{XGBoost}, a Violin chart containing accuracy scores of all images categorized by cache is first taken. A violin chart extends on a box-plot such that data distribution is better visible. See Figure~\ref{fig:xgboost-violinplot}.
+In order to first get a general idea of the overall performance of \textit{XGBoost}, a Violin chart containing accuracy scores of all images categorized by pixel size configuration is first taken. A violin chart extends on a box-plot such that data distribution is better visible. See Figure~\ref{fig:xgboost-violinplot}.
 
 \begin{figure}[ht]
   \centering
@@ -23,7 +23,7 @@ The plot shows, that although test accuracy is mostly distributed in the $[0.9, 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-histogram}
-  \caption{Histogram showing accuracy score distribution for all caches at a test-set of $1000$ images in $log$ scale. 2-element feature vector.
+  \caption{Histogram showing accuracy score distribution for all pixel size configurations at a test-set of $1000$ images in $log$ scale. 2-element feature vector.
   }\label{fig:xgboost-histogram}
 \end{figure}
 
@@ -38,7 +38,7 @@ Plotting distribution in logarithmic scale allows for visualizing less frequent 
 \end{figure}
 
 % Possible correlation? Plot one of those non- road marking images.
-In the chart is visible that a possible correlation exists between low accuracy scores and images with few road-marker pixels in them. There exist a clear vertical line with various levels of low-accuracy scoring, all at the $0.000$ fraction level. One such image, taken from the $175$x$350$ cache, is shown in Figure~\ref{fig:xgboost-prediction-dark-gt}. 
+In the chart is visible that a possible correlation exists between low accuracy scores and images with few road-marker pixels in them. There exist a clear vertical line with various levels of low-accuracy scoring, all at the $0.000$ fraction level. One such image, taken from the $175$x$350$ pixel size configuration, is shown in Figure~\ref{fig:xgboost-prediction-dark-gt}. 
 
 \begin{figure}[ht]
   \centering
@@ -67,7 +67,7 @@ Predictions of different accuracy levels were explored, all for the XGBoost clas
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-classifiers-cache-performance}
-  \caption{Classifiers performance comparison, taken using the means for every split, for $n\_splits = 10$; resulting in 10 data-points per bar.
+  \caption{Classifiers performance comparison, taken using the means for every split, for $n\_splits = 10$; resulting in 10 data-points per bar. 
   }\label{fig:classifiers-cache-perfomance}
 \end{figure}
 
@@ -118,6 +118,8 @@ An experiment using a 5-element feature vector was also run. As was explained in
   \caption{5-element feature vector 10-fold prediction performance per pixel size configuration.
   }\label{fig:5-element-fv-classifiers-cache-performance}
 \end{figure}
+
+Visible in Figure~\ref{fig:5-element-fv-xgboost-violinplot} is that accuracies are similarly distributed like the experiment using a 2-element feature vector. Accuracies are mostly distributed around the [0.93, 0.99] range, but go down up to 0.2.
 
 \begin{figure}[ht]
   \centering
@@ -176,10 +178,10 @@ The cache pipeline step executes at a reasonable speed, and at foremost- is a on
 \end{figure}
 
 % Talk about how transformations get slower with increasing pixel sizes.
-Visible in the figure (Figure~\ref{fig:pipeline-performance}), is that transformation performance decreases in somewhat linear fashion. This is because of the fact that image width and height in increasingly large pixel size configurations are not doubled, but increased by smaller increments. Transformation performance is very fast up to the $175$x$350$ cache level. After this, performance slows down fast.
+Visible in the figure (Figure~\ref{fig:pipeline-performance}), is that transformation performance decreases in somewhat linear fashion. This is because of the fact that image width and height in increasingly large pixel size configurations are not doubled, but increased by smaller increments. Transformation performance is very fast up to the $175$x$350$ pixel size configuration level. After this, performance slows down fast.
 
 % Talk about how training times remain somewhat constant.
-Training times, however, remain rather constant across the entire cache range. This is because classifiers train upon a sampled data-set, for which the sample size remains constant across all caches. It is visible though, that \textit{SVM} takes longer to train than \textit{XGBoost}.
+Training times, however, remain rather constant across the entire pixel size range. This is because classifiers train upon a sampled data-set, for which the sample size remains constant across all pixel size configurations. It is visible though, that \textit{SVM} takes longer to train than \textit{XGBoost}.
 
 % Talk about how test times are through-the-roof when pixel size configurations increase.
 Test times, however, are significantly impacted by pixel size configurations; for every increase in pixel size configuration, a significantly higher amount of pixel-values have to be predicted. Because of the great differences in test times, the pipeline test performance chart was depicted in a \textit{logarithmic} scale. For the $525$x$1050$ pixel size configuration, a \textit{SVM} takes at least $158$ seconds to predict $1$ image, whilst \textit{XGBoost} takes $3$ seconds for the same case.
