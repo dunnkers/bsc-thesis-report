@@ -2,22 +2,26 @@
 
 \section{Conclusions}\label{sec:conclusions}
 % We are tested 2 classifiers
-In the study, a fusion algorithm between two existing algorithms was presented. The new fusion approach was then tested under several conditions. Two different classifiers were tested, ran under different configurations of cached image pixel sizes. $8$ different configurations were tested in total, for which the last configuration, the 525x1050 was only tested for \textit{XGBoost}, because \textit{SVM} was too slow to predict in this case. All configurations were tested using a $10$-fold cross-validation setup.
+In the study, a fusion algorithm between two existing algorithms was presented. The new fusion approach was then tested under several conditions. The entire pipeline was run using two different feature-vectors; a 2-element feature vector, combining the supervised- and unsupervised approach, and a 5-element feature vector, additionally adding in the input image RGB values. For every feature-vector setup, two different classifiers were tested, ran under different configurations of cached image pixel sizes. 8 different pixel size configurations were tested in total. In the 2-element feature vector pipeline, the 525x1050 configuration was only tested for \textit{XGBoost}, because \textit{SVM} was too slow to predict in this case, see Section~\ref{sec:pipeline-performance}. In the 5-element feature vector pipeline the 350x700 configuration was too slow to predict using SVM. The 525x1050 configuration was too large for both classifiers in a 5-element feature vector setup. All configurations were tested using a $10$-fold cross-validation setup.
 
-% General results
-Accuracy scores for both classifiers were distributed mostly around the $[0.94, 0.99]$ accuracy score range, with outlying scores down to $0.15$, as seen in Figure~\ref{fig:xgboost-violinplot}. Very low (outlier) accuracy scores were correlated with the fraction of road marking pixels in an image. This observation is made in Figure~\ref{fig:xgboost-scatterplot}; outlier accuracy scores are likely when groundtruth- images show no road-markings.
+% Overall results
+For both
 
-% Per-cache or classifier results differ. So we explore further.
-Per-cache/per-classifier accuracy scores showed a reasonable difference between categories, as shown in Figure~\ref{fig:classifiers-cache-perfomance}. For this reason, it makes sense to further explore these differences, seeking for the optimal- pixel configuration and classifier.
+%% BEFORE ADDING A 5-ELEMENT FEATURE VECTOR AND AUC/ROC CHARTS
+% % General results
+% Accuracy scores for both classifiers were distributed mostly around the $[0.94, 0.99]$ accuracy score range, with outlying scores down to $0.15$, as seen in Figure~\ref{fig:xgboost-violinplot}. Very low (outlier) accuracy scores were correlated with the fraction of road marking pixels in an image. This observation is made in Figure~\ref{fig:xgboost-scatterplot}; outlier accuracy scores are likely when groundtruth- images show no road-markings.
 
-% Optimal cache
-In searching for the optimal cache, results of both classifiers were aggregated into one plot and sorted by median accuracy as is displayed by the box-plot figures in Figure~\ref{fig:cache-performance}. It is shown that the best performing cache is of the $350$x$700$ configuration, which also has a reasonably sized error margin.
+% % Per-cache or classifier results differ. So we explore further.
+% Per-cache/per-classifier accuracy scores showed a reasonable difference between categories, as shown in Figure~\ref{fig:classifiers-cache-perfomance}. For this reason, it makes sense to further explore these differences, seeking for the optimal- pixel configuration and classifier.
 
-% Optimal classifier
-To find an optimal classifier, all cache results were aggregated such that the result data can be categorized by classifier type. Classifier plotted against accuracy score was shown in Figure~\ref{fig:classifier-performance}. It can be concluded that, by a very small margin, the \textit{XGBoost} classifier performs best at this classification task.
+% % Optimal cache
+% In searching for the optimal cache, results of both classifiers were aggregated into one plot and sorted by median accuracy as is displayed by the box-plot figures in Figure~\ref{fig:cache-performance}. It is shown that the best performing cache is of the $350$x$700$ configuration, which also has a reasonably sized error margin.
 
-% Classifier error-margin / speed trade-off.
-It is worth noting that despite having a lower accuracy mean, the \textit{SVM} shows smaller error margins than \textit{XGBoost}. A higher overall accuracy score with slightly larger error margins might be worth the trade-off, however, since the \textit{SVM} is shown to take significantly longer in predicting images than \textit{XGBoost}. See Figure~\ref{fig:pipeline-performance} for this statistic. 
+% % Optimal classifier
+% To find an optimal classifier, all cache results were aggregated such that the result data can be categorized by classifier type. Classifier plotted against accuracy score was shown in Figure~\ref{fig:classifier-performance}. It can be concluded that, by a very small margin, the \textit{XGBoost} classifier performs best at this classification task.
+
+% % Classifier error-margin / speed trade-off.
+% It is worth noting that despite having a lower accuracy mean, the \textit{SVM} shows smaller error margins than \textit{XGBoost}. A higher overall accuracy score with slightly larger error margins might be worth the trade-off, however, since the \textit{SVM} is shown to take significantly longer in predicting images than \textit{XGBoost}. See Figure~\ref{fig:pipeline-performance} for this statistic. 
 
 % Accuracy- speed cache trade-off
 % NOTE. I forgot to take note of the fact that once a cache is trained, it can be used to predict *any* other cache sizes. Test time performance thus does not play such a big part in this.

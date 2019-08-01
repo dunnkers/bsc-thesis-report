@@ -13,7 +13,7 @@ In order to first get a general idea of the overall performance of \textit{XGBoo
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-violinplot}
-  \caption{XGBoost accuracy performance for total test-set of $1000$ images.
+  \caption{XGBoost accuracy performance for total test-set of $1000$ images for fv=2-element.
   }\label{fig:xgboost-violinplot}
 \end{figure}
 
@@ -23,7 +23,7 @@ The plot shows, that although test accuracy is mostly distributed in the $[0.9, 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-histogram}
-  \caption{Histogram showing accuracy score distribution for all caches at a test-set of $1000$ images in $log$ scale.
+  \caption{Histogram showing accuracy score distribution for all caches at a test-set of $1000$ images in $log$ scale. 2-element feature vector.
   }\label{fig:xgboost-histogram}
 \end{figure}
 
@@ -33,7 +33,7 @@ Plotting distribution in logarithmic scale allows for visualizing less frequent 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-scatterplot}
-  \caption{Plotting accuracy score vs fraction of road marker pixels.
+  \caption{Plotting accuracy score vs fraction of road marker pixels, for 2-element feature vector.
   }\label{fig:xgboost-scatterplot}
 \end{figure}
 
@@ -43,7 +43,7 @@ In the chart is visible that a possible correlation exists between low accuracy 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth,height=\textwidth]{img/max_samples=200,folds=10,clf=XGBoost-prediction-image752}
-  \caption{Accuracy score of $29.42\%$ of an image with no road markings marked in its groundtruth.
+  \caption{Accuracy score of $29.42\%$ of an image, using a 2-element feature vector, with no road markings marked in its groundtruth.
   }\label{fig:xgboost-prediction-dark-gt}
 \end{figure}
 
@@ -56,7 +56,7 @@ There, however, also exist some similarly challenging images with a significantl
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-prediction-image631}
-  \caption{A prediction of an image with multiple road markings, yielding an accuracy score of $98.84\%$.
+  \caption{A prediction of an image with multiple road markings using a 2-element feature vector, yielding an accuracy score of $98.84\%$.
   }\label{fig:xgboost-prediction-high-acc}
 \end{figure}
 
@@ -80,7 +80,7 @@ To get a better understanding of what exactly the performance of the individual 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-cache-performance}
-  \caption{Per-pixel size configuration score chart, obtained by taking the mean of every fold, for both classifiers aggregated.
+  \caption{Per-pixel size configuration score chart using a 2-element feature vector, obtained by taking the mean of every fold, for both classifiers aggregated.
   }\label{fig:cache-performance}
 \end{figure}
 
@@ -90,7 +90,7 @@ To get a better understanding on the other hand of the individual classifier per
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-classifiers-performance}
-  \caption{Cache data aggregated into classifier categories plotted against accuracy score. \textit{SVM} showing a median of $0.9454$ and mean of $0.9442$. \textit{XGBoost} showing a median of $0.9473$ and mean of $0.9454$.
+  \caption{Cache data aggregated into classifier categories plotted against accuracy score using a 2-element feature vector. \textit{SVM} showing a median of $0.9454$ and mean of $0.9442$. \textit{XGBoost} showing a median of $0.9473$ and mean of $0.9454$.
   }\label{fig:classifier-performance}
 \end{figure}
 
@@ -101,7 +101,7 @@ In order to further explore the statistical difference in also the error made by
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost-confusion-matrix}
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=SVM-confusion-matrix}
-  \caption{XGBoost- and SVM confusion matrices for the $175$x$350$ cache.
+  \caption{XGBoost- and SVM confusion matrices for the $175$x$350$ cache using a 2-element feature vector.
   }\label{fig:confusion-matrices}
 \end{figure}
 
@@ -110,13 +110,20 @@ Shown by the confusion matrices is that XGBoost classifies more data-points as n
 
 \subsection{Fusion algorithm using a 5-element feature vector}
 % How does the 5-element feature vector match up against the 2-element feature vector?
-An experiment using a 5-element feature vector was also run. As was explained in Section~\ref{sec:method_transforming}, a 5-element feature vector is constructed by combining the supervised- and unsupervised approach images and the input image RGB values. Visible in Figure~\ref{fig:5-element-fv-classifiers-cache-performance} is the overall prediction performance of the fusion algorithm using a 5-element feature vector. Noticeable is the fact that SVM performs significantly worse than XGBoost.
+An experiment using a 5-element feature vector was also run. As was explained in Section~\ref{sec:method_transforming}, a 5-element feature vector is constructed by combining the supervised- and unsupervised approach images and the input image RGB values. Visible in Figure~\ref{fig:5-element-fv-classifiers-cache-performance} is the overall prediction performance of the fusion algorithm using a 5-element feature vector. Noticeable is the fact that SVM performs significantly worse than XGBoost. SVM performance gets lower with increasingly larger pixel size configurations, whilst XGBoost performance improves with larger pixel size configurations.
 
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/folds=10,fv=5-ELEMENT-classifiers-cache-performance}
   \caption{5-element feature vector 10-fold prediction performance per pixel size configuration.
   }\label{fig:5-element-fv-classifiers-cache-performance}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includesvg[width=\linewidth]{img/folds=10,fv=5-ELEMENT,clf=XGBoost-violinplot}
+  \caption{XGBoost accuracy performance for total test-set of $1000$ images for fv=5-element.
+  }\label{fig:5-element-fv-xgboost-violinplot}
 \end{figure}
 
 \subsection{Approaches compared}
@@ -164,7 +171,7 @@ The cache pipeline step executes at a reasonable speed, and at foremost- is a on
 \begin{figure}[ht]
   \centering
   \includesvg[width=\linewidth]{img/max_samples=200,folds=10-pipeline-performance.svg}
-  \caption{Pipeline performance using an Intel Core i7-3820 Quad CPU @ 3.60GHz, running 64-bit Ubuntu 19.04 system at 8,0 GiB RAM.
+  \caption{2-element feature vector pipeline performance using an Intel Core i7-3820 Quad CPU @ 3.60GHz, running 64-bit Ubuntu 19.04 system at 8,0 GiB RAM.
   }\label{fig:pipeline-performance}
 \end{figure}
 
