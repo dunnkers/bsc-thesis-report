@@ -4,7 +4,7 @@
 In the results, first the performance of the fusion algorithm is explored using a 2-element feature vector. Next, the 5-element feature vector fusion algorithm performance is analyzed and compared to the 2-element feature vector. Then, an analysis is made on the difference in performance between the supervised, unsupervised and fusion approach. Lastly, pipeline performance measurements are taken into consideration.
 
 \subsection{Fusion algorithm using a 2-element feature vector}\label{sec:results_2-elem-fv}
-The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. The study focused on two classifiers: a \textit{Support Vector Machine} using LibSVM \citep{chang2011libsvm} and \textit{Gradient Boosting} using XGBoost \citep{chen2016xgboost}. General results of the prediction are first explored, using the \textit{XGBoost} classifier. Afterward, a comparison between the two classifiers is made.
+The data-set was tested under several configuration conditions. Different- pixels size configurations and classifiers were used, all using a $10$-fold cross validation setup. According to the decided upon scope of the study, two classifiers are used; \textit{Support Vector Machine} (SVM) and \textit{Gradient Boosting} (XGBoost). General results of the prediction are first explored, using the \textit{XGBoost} classifier. Afterward, a comparison between the two classifiers is made.
 
 \subsubsection{Overall performance using the XGBoost Classifier}
 % Take a look at the overall accuracy.
@@ -137,29 +137,29 @@ In the charts of Figure~\ref{fig:supervised-aucroc}, Figure~\ref{fig:unsupervise
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/cache=350x700,ic=supervised-aucroc}
-  \caption{Supervised approach AUC score and ROC curve for the pixel configuration 350x700.
+  \includesvg[width=\linewidth]{img/cache=175x350,ic=supervised-aucroc}
+  \caption{Supervised approach AUC score and ROC curve for the pixel configuration 175x350.
   }\label{fig:supervised-aucroc}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/cache=350x700,ic=unsupervised-aucroc}
-  \caption{Unsupervised approach AUC score and ROC curve for the pixel configuration 350x700.
+  \includesvg[width=\linewidth]{img/cache=175x350,ic=unsupervised-aucroc}
+  \caption{Unsupervised approach AUC score and ROC curve for the pixel configuration 175x350.
   }\label{fig:unsupervised-aucroc}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost,cache=350x700,ic=fusion-aucroc}
-  \caption{Fusion approach AUC score and ROC curve for the pixel configuration 350x700 using a 2-element feature vector.
+  \includesvg[width=\linewidth]{img/max_samples=200,folds=10,clf=XGBoost,cache=175x350,ic=fusion-aucroc}
+  \caption{Fusion approach AUC score and ROC curve for the pixel configuration 175x350 using a 2-element feature vector.
   }\label{fig:fusion-aucroc}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
-  \includesvg[width=\linewidth]{img/folds=10,fv=5-ELEMENT,clf=XGBoost,cache=350x700,ic=fusion-aucroc}
-  \caption{Fusion approach AUC score and ROC curve for the pixel configuration 350x700 using a 5-element feature vector.
+  \includesvg[width=\linewidth]{img/folds=10,fv=5-ELEMENT,clf=XGBoost,cache=175x350,ic=fusion-aucroc}
+  \caption{Fusion approach AUC score and ROC curve for the pixel configuration 175x350 using a 5-element feature vector.
   }\label{fig:5-element-fv-fusion-aucroc}
 \end{figure}
 
